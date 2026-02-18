@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>FiveM Craft Calculator Fix</title>
+<title>FiveM Craft Calculator Complet</title>
 <style>
 body {margin:0; font-family: Arial; background:#111; color:white; display:flex; justify-content:center; padding:20px;}
 .container {background: rgba(0,0,0,0.95); padding:30px; width:1000px; border-radius:10px;}
@@ -56,11 +56,16 @@ section.show { max-height:500px; opacity:1;}
 </div>
 
 <script>
+// ==================== DATE ARME + ATAȘAMENTE ====================
 const weapons={
-"PISTOL":{type:"craft",img:"https://i.imgur.com/2V6Uq0l.png",materials:{steel:8,screw:80,barrel:0,spring:1,wood:0,polymer:20},bullets:{100:100,200:200,250:250},attachments:{lanterna:{img:"https://i.imgur.com/KU2s0Gp.png",steel:1,screw:5,arc:1,polymer:1,bec:1,lupa:1}}}},
-"VINTAGE PISTOL":{type:"money",img:"https://i.imgur.com/VHgxv6t.png",price:25000,attachments:{incarcator:{img:"https://i.imgur.com/y7F1pQa.png",steel:1,screw:5,arc:1,polymer:1}}}}
+"PISTOL":{type:"craft",img:"https://i.imgur.com/2V6Uq0l.png",materials:{steel:8,screw:80,barrel:0,spring:1,wood:0,polymer:20},bullets:{100:100,200:200,250:250},attachments:{lanterna:{img:"https://i.imgur.com/KU2s0Gp.png",steel:1,screw:5,arc:1,polymer:1,bec:1,lupa:1},amortizor:{img:"https://i.imgur.com/FjPCvXP.png",steel:2,screw:5,polymer:2},incarcator:{img:"https://i.imgur.com/y7F1pQa.png",steel:1,screw:5,arc:1,polymer:1}}}},
+"COMBAT PISTOL":{type:"craft",img:"https://i.imgur.com/dcXtDjp.png",materials:{steel:8,screw:85,barrel:0,spring:0,wood:0,polymer:18},bullets:{100:100,200:200,250:250},attachments:{lanterna:{img:"https://i.imgur.com/KU2s0Gp.png",steel:1,screw:5,arc:1,polymer:1,bec:1,lupa:1},amortizor:{img:"https://i.imgur.com/FjPCvXP.png",steel:2,screw:5,polymer:2},incarcator:{img:"https://i.imgur.com/y7F1pQa.png",steel:1,screw:5,arc:1,polymer:1}}}},
+"VINTAGE PISTOL":{type:"money",img:"https://i.imgur.com/VHgxv6t.png",price:25000,attachments:{incarcator:{img:"https://i.imgur.com/y7F1pQa.png",steel:1,screw:5,arc:1,polymer:1},amortizor:{img:"https://i.imgur.com/FjPCvXP.png",steel:2,screw:5,polymer:2}}}},
+"TEC PISTOL (Tactical SMG)":{type:"craft",img:"https://i.imgur.com/Xm2r1Mi.png",materials:{steel:14,screw:115,barrel:1,spring:1,wood:0,polymer:44},bullets:{100:150,200:300,250:375},attachments:{luneta:{img:"https://i.imgur.com/ZR8Vf2E.png",steel:2,screw:10,arc:0,polymer:2,bec:0,lupa:1},incarcator:{img:"https://i.imgur.com/y7F1pQa.png",steel:2,screw:10,arc:1,polymer:2},suppresor:{img:"https://i.imgur.com/FjPCvXP.png",steel:3,screw:5,arc:0,polymer:3}}}},
+"MICRO SMG":{type:"craft",img:"https://i.imgur.com/QAxDcJH.png",materials:{steel:15,screw:95,barrel:1,spring:1,wood:0,polymer:42},bullets:{100:150,200:300,250:375},attachments:{luneta:{img:"https://i.imgur.com/ZR8Vf2E.png",steel:2,screw:10,arc:0,polymer:2,bec:0,lupa:1},lanterna:{img:"https://i.imgur.com/KU2s0Gp.png",steel:1,screw:5,arc:0,polymer:1,bec:1,lupa:1},amortizor:{img:"https://i.imgur.com/FjPCvXP.png",steel:3,screw:5,arc:0,polymer:3},incarcator:{img:"https://i.imgur.com/y7F1pQa.png",steel:2,screw:10,arc:1,polymer:2}}}}
 };
 
+// ==================== ELEMENTE UI ====================
 const weaponSelect=document.getElementById("weaponSelect");
 const weaponPreview=document.getElementById("weaponPreview");
 const bulletsSection=document.getElementById("bulletsSection");
@@ -72,14 +77,17 @@ const calcBtn=document.getElementById("calcBtn");
 const resetBtn=document.getElementById("resetBtn");
 const resultDiv=document.getElementById("result");
 
+// Populare select arme
 Object.keys(weapons).forEach(w=>{
     const opt=document.createElement("option"); opt.value=w; opt.text=w;
     weaponSelect.appendChild(opt);
 });
 
+// ==================== FUNCTII ====================
 function hideAll(){[bulletsSection,attachmentsSection,quantitySection].forEach(s=>s.classList.remove("show")); bulletsSelect.innerHTML=""; attachmentList.innerHTML=""; calcBtn.style.display="none"; resetBtn.style.display="none"; resultDiv.innerHTML="";}
 function showSection(section){section.classList.add("show");}
 
+// ==================== LOGIC PROGRESIV ====================
 weaponSelect.addEventListener("change",()=>{
     hideAll();
     const w=weapons[weaponSelect.value];
@@ -108,6 +116,7 @@ bulletsSelect.addEventListener("change",()=>{
 
 document.getElementById("noAttach").addEventListener("change",function(){document.querySelectorAll(".attachCheck").forEach(c=>{c.checked=false;c.disabled=this.checked;});});
 
+// ==================== CALCUL ====================
 calcBtn.addEventListener("click",()=>{
     const w=weapons[weaponSelect.value];
     if(!w) return alert("Selectează o armă!");
