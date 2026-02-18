@@ -2,7 +2,7 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>FiveM Armes Craft Calculator Animat & Aranjat</title>
+<title>FiveM Armes Craft Calculator Animat & Fluid</title>
 <style>
 body {
     margin:0;
@@ -14,7 +14,7 @@ body {
     padding:20px;
 }
 .container {
-    background: rgba(0,0,0,0.9);
+    background: rgba(0,0,0,0.95);
     padding:30px;
     width:1000px;
     border-radius:10px;
@@ -50,7 +50,13 @@ button:hover {background:#27ae60;}
     padding:15px;
     background:#222;
     border-radius:8px;
-    transition:all 0.3s;
+    transition:all 0.5s;
+    transform: translateY(-20px);
+    opacity:0;
+}
+.result.show {
+    opacity:1;
+    transform: translateY(0);
 }
 h3 {margin:10px 0 5px 0;}
 .attachStep {
@@ -58,7 +64,12 @@ h3 {margin:10px 0 5px 0;}
     align-items:center;
     margin:5px 0;
     opacity:0;
-    transition: all 0.3s;
+    transform:translateX(-20px);
+    transition: all 0.4s;
+}
+.attachStep.show {
+    opacity:1;
+    transform:translateX(0);
 }
 section {
     overflow:hidden;
@@ -72,15 +83,25 @@ section.show {max-height:500px;opacity:1;}
     top:0; left:0;
     width:100%; height:100%;
     background:rgba(0,0,0,0.7);
-    display:none;
+    display:flex;
     justify-content:center;
     align-items:center;
+    opacity:0;
+    transform:translateY(50px);
+    transition:all 0.4s;
+    pointer-events:none;
+}
+.popup.show {
+    opacity:1;
+    transform:translateY(0);
+    pointer-events:auto;
 }
 .popupContent {
     background:#222;
     padding:20px;
     border-radius:10px;
     color:white;
+    min-width:300px;
 }
 .popupContent button {margin-top:10px;}
 </style>
@@ -114,13 +135,13 @@ section.show {max-height:500px;opacity:1;}
 </section>
 
 <button id="calcBtn" style="display:none;">Calculează</button>
-<div id="result" class="result" style="display:none;"></div>
+<div id="result" class="result"></div>
 </div>
 
 <div class="popup" id="popup">
 <div class="popupContent">
 <p id="popupText"></p>
-<button onclick="document.getElementById('popup').style.display='none'">OK</button>
+<button onclick="document.getElementById('popup').classList.remove('show')">OK</button>
 </div>
 </div>
 
@@ -129,7 +150,6 @@ section.show {max-height:500px;opacity:1;}
 const weapons={
 "PISTOL":{type:"craft",materials:{steel:8,screw:80,barrel:0,spring:1,wood:0,polymer:20},bullets:{100:100,200:200,250:250},attachments:{lanterna:{steel:1,screw:5,arc:1,polymer:1,bec:1,lupa:1},amortizor:{steel:2,screw:5,polymer:2},incarcator:{steel:1,screw:5,arc:1,polymer:1}}},
 "COMBAT PISTOL":{type:"craft",materials:{steel:8,screw:85,barrel:0,spring:0,wood:0,polymer:18},bullets:{100:100,200:200,250:250},attachments:{lanterna:{steel:1,screw:5,arc:1,polymer:1,bec:1,lupa:1},amortizor:{steel:2,screw:5,polymer:2},incarcator:{steel:1,screw:5,arc:1,polymer:1}}},
-// Adaugă toate armele
 "VINTAGE PISTOL":{type:"money",price:25000,attachments:{incarcator:{steel:1,screw:5,arc:1,polymer:1},amortizor:{steel:2,screw:5,polymer:2}}}
 };
 
@@ -149,15 +169,16 @@ Object.keys(weapons).forEach(w=>{
     weaponSelect.appendChild(opt);
 });
 
-// ==================== FUNCTII ANIMATIE ====================
+// ==================== FUNCTII ====================
 function showSection(section){section.classList.add("show");}
 function hideSection(section){section.classList.remove("show");}
+function showPopup(msg){document.getElementById('popupText').innerText=msg;document.getElementById('popup').classList.add('show');}
 
 // ==================== LOGIC PROGRESIV ====================
 weaponSelect.addEventListener("change",()=>{
     const weapon=weapons[weaponSelect.value];
     hideSection(bulletsSection); hideSection(attachmentsSection); hideSection(quantitySection);
-    calcBtn.style.display="none"; resultDiv.style.display="none";
+    calcBtn.style.display="none"; resultDiv.classList.remove("show");
     bulletsSelect.innerHTML=""; attachmentList.innerHTML="";
     document.getElementById("noAttach").checked=false;
 
@@ -189,7 +210,7 @@ bulletsSelect.addEventListener("change",()=>{
         const lbl=document.createElement("label"); lbl.className="attachStep";
         lbl.innerHTML=`<input type="checkbox" class="attachCheck" value="${att}"> ${att}`;
         attachmentList.appendChild(lbl);
-        setTimeout(()=>{lbl.style.opacity=1; addNextAttachment();},100);
+        setTimeout(()=>{lbl.classList.add('show'); addNextAttachment();},100);
         i++;
     }
     addNextAttachment();
@@ -206,7 +227,7 @@ calcBtn.addEventListener("click",()=>{
     const weaponKey=weaponSelect.value;
     const weapon=weapons[weaponKey];
     const qty=parseInt(document.getElementById("weaponQty").value)||1;
-    if(!weapon){document.getElementById('popupText').innerText='Selectează o armă!';document.getElementById('popup').style.display='flex'; return;}
+    if(!weapon){showPopup('Selectează o armă!'); return;}
     const totals={steel:0,screw:0,barrel:0,spring:0,wood:0,polymer:0,powder:0};
 
     if(weapon.type==="craft"){
@@ -234,7 +255,6 @@ calcBtn.addEventListener("click",()=>{
         totalCost+=totals.powder*150;
     }else totalCost+=weapon.price*qty;
 
-    resultDiv.style.display="block";
     resultDiv.innerHTML=`<h3>Rezultat</h3>
     Oțel: ${totals.steel}<br>
     Șurub: ${totals.screw}<br>
@@ -244,6 +264,7 @@ calcBtn.addEventListener("click",()=>{
     Polimer: ${totals.polymer}<br>
     Praf de pușcă: ${totals.powder}<br>
     <br><strong>Cost total estimativ: ${totalCost.toLocaleString()}$</strong>`;
+    resultDiv.classList.add("show");
 });
 </script>
 </body>
