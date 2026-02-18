@@ -2,19 +2,22 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>FiveM Armes Craft Calculator Progresiv</title>
+<title>FiveM Armes Craft Calculator Animat</title>
 <style>
 body {margin:0;font-family:Arial;background:#111;color:white;display:flex;justify-content:center;padding:20px;}
-.container {background:rgba(0,0,0,0.85);padding:30px;width:1000px;border-radius:10px;}
+.container {background:rgba(0,0,0,0.85);padding:30px;width:1000px;border-radius:10px;transition:all 0.3s;}
 select,input,button{width:100%;padding:8px;margin-top:10px;font-size:14px;}
-button{cursor:pointer;background:#2ecc71;border:none;color:white;font-weight:bold;}
-.result{margin-top:20px;padding:15px;background:#222;border-radius:8px;}
+button{cursor:pointer;background:#2ecc71;border:none;color:white;font-weight:bold;transition:0.3s;}
+button:hover{background:#27ae60;}
+.result{margin-top:20px;padding:15px;background:#222;border-radius:8px;transition:all 0.3s;}
 h3{margin:10px 0 5px 0;}
-label{display:block;margin:5px 0;}
+label{display:block;margin:5px 0;opacity:0;transition:all 0.3s;}
+.attachStep{margin-top:5px;opacity:0;transition:all 0.3s;}
+section{overflow:hidden;max-height:0;transition:max-height 0.5s ease-out, opacity 0.3s;}
+section.show{max-height:500px;opacity:1;}
 .popup{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);display:none;justify-content:center;align-items:center;}
 .popupContent{background:#222;padding:20px;border-radius:10px;color:white;}
 .popupContent button{margin-top:10px;}
-.attachStep{margin-top:5px;}
 </style>
 </head>
 <body>
@@ -22,21 +25,21 @@ label{display:block;margin:5px 0;}
 <h3>Ce vrei să craftezi?</h3>
 <select id="weaponSelect"><option value="">-- Selectează arma --</option></select>
 
-<div id="bulletsSection" style="display:none;">
+<section id="bulletsSection">
 <h3>Câte gloanțe vrei?</h3>
 <select id="bullets"></select>
-</div>
+</section>
 
-<div id="attachmentsSection" style="display:none;">
+<section id="attachmentsSection">
 <h3>Atașamente</h3>
 <label><input type="checkbox" id="noAttach"> Nu vreau atașamente</label>
 <div id="attachmentList"></div>
-</div>
+</section>
 
-<div id="quantitySection" style="display:none;">
+<section id="quantitySection">
 <h3>Câte arme vrei?</h3>
 <input type="number" id="weaponQty" min="1" value="1">
-</div>
+</section>
 
 <button id="calcBtn" style="display:none;">Calculează</button>
 <div id="result" class="result" style="display:none;"></div>
@@ -55,7 +58,7 @@ const weapons={
 "PISTOL":{type:"craft",materials:{steel:8,screw:80,barrel:0,spring:1,wood:0,polymer:20},bullets:{100:100,200:200,250:250},attachments:{lanterna:{steel:1,screw:5,arc:1,polymer:1,bec:1,lupa:1},amortizor:{steel:2,screw:5,polymer:2},incarcator:{steel:1,screw:5,arc:1,polymer:1}}},
 "COMBAT PISTOL":{type:"craft",materials:{steel:8,screw:85,barrel:0,spring:0,wood:0,polymer:18},bullets:{100:100,200:200,250:250},attachments:{lanterna:{steel:1,screw:5,arc:1,polymer:1,bec:1,lupa:1},amortizor:{steel:2,screw:5,polymer:2},incarcator:{steel:1,screw:5,arc:1,polymer:1}}},
 "PISTOL MK2":{type:"craft",materials:{steel:9,screw:91,barrel:0,spring:1,wood:0,polymer:22},bullets:{100:130,200:260,250:325},attachments:{incarcator:{steel:1,screw:5,arc:1,polymer:1},mounted_scope:{steel:2,screw:10,polymer:2,lupa:1},amortizor:{steel:2,screw:5,polymer:2},lanterna:{steel:1,screw:5,arc:1,polymer:1,bec:1,lupa:1}}},
-// aici pui restul armelor craft + pe bani, exact ca în codul precedent
+// adaugă aici toate armele craft și pe bani exact ca în versiunea precedentă
 };
 
 // ==================== ELEMENTE UI ====================
@@ -74,63 +77,60 @@ Object.keys(weapons).forEach(w=>{
     weaponSelect.appendChild(opt);
 });
 
-// Pas 1: select arma
+// ==================== FUNCTII ANIMATIE ====================
+function showSection(section){
+    section.classList.add("show");
+}
+function hideSection(section){
+    section.classList.remove("show");
+}
+
+// ==================== LOGIC PROGRESIV ====================
 weaponSelect.addEventListener("change",()=>{
     const weapon=weapons[weaponSelect.value];
-    bulletsSection.style.display="none";
-    attachmentsSection.style.display="none";
-    quantitySection.style.display="none";
-    calcBtn.style.display="none";
-    resultDiv.style.display="none";
-    bulletsSelect.innerHTML="";
-    attachmentList.innerHTML="";
+    hideSection(bulletsSection); hideSection(attachmentsSection); hideSection(quantitySection);
+    calcBtn.style.display="none"; resultDiv.style.display="none";
+    bulletsSelect.innerHTML=""; attachmentList.innerHTML="";
     document.getElementById("noAttach").checked=false;
 
     if(!weapon) return;
 
-    // Pas 2: gloanțe dacă arma e craft
     if(weapon.type==="craft"){
-        bulletsSection.style.display="block";
         Object.keys(weapon.bullets).forEach(b=>{
             const opt=document.createElement("option"); opt.value=b; opt.text=b;
             bulletsSelect.appendChild(opt);
         });
+        showSection(bulletsSection);
     } else {
-        // arme pe bani → nu gloanțe
-        quantitySection.style.display="block";
+        showSection(quantitySection);
         calcBtn.style.display="block";
     }
 });
 
-// Pas 3: atașamente
 bulletsSelect.addEventListener("change",()=>{
     const weapon=weapons[weaponSelect.value];
     if(!weapon || !weapon.attachments) return;
-    attachmentsSection.style.display="block";
     attachmentList.innerHTML="";
+    showSection(attachmentsSection);
 
     const keys=Object.keys(weapon.attachments);
     let i=0;
     function addNextAttachment(){
         if(i>=keys.length) return;
         const att=keys[i];
-        const lbl=document.createElement("label");
-        lbl.className="attachStep";
+        const lbl=document.createElement("label"); lbl.className="attachStep";
         lbl.innerHTML=`<input type="checkbox" class="attachCheck" value="${att}"> ${att}`;
         attachmentList.appendChild(lbl);
+        setTimeout(()=>{lbl.style.opacity=1; addNextAttachment();},100);
         i++;
-        setTimeout(addNextAttachment,100); // apare progresiv 1 câte 1
     }
     addNextAttachment();
-
-    quantitySection.style.display="block";
+    showSection(quantitySection);
     calcBtn.style.display="block";
 });
 
-// Disable atașamente dacă Nu vreau
 document.getElementById("noAttach").addEventListener("change",function(){
-    const checks=document.querySelectorAll(".attachCheck");
-    checks.forEach(c=>{c.checked=false;c.disabled=this.checked;});
+    document.querySelectorAll(".attachCheck").forEach(c=>{c.checked=false;c.disabled=this.checked;});
 });
 
 // ==================== CALCUL ====================
