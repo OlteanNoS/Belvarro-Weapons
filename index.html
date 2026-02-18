@@ -20,26 +20,12 @@ label{display:block;margin:5px 0;}
 
 <div id="bulletsSection" style="display:none;">
 <h3>Câte gloanțe vrei?</h3>
-<select id="bullets">
-<option value="100">100</option>
-<option value="200">200</option>
-<option value="250">250</option>
-<option value="300">300</option>
-<option value="400">400</option>
-<option value="500">500</option>
-<option value="600">600</option>
-<option value="700">700</option>
-<option value="800">800</option>
-<option value="900">900</option>
-<option value="1000">1000</option>
-<option value="1500">1500</option>
-<option value="2000">2000</option>
-</select>
+<select id="bullets"></select>
 </div>
 
 <div id="attachmentsSection" style="display:none;">
 <h3>Atașamente</h3>
-<label><input type="checkbox" value="none" id="noAttach"> Nu vreau atașamente</label>
+<label><input type="checkbox" id="noAttach"> Nu vreau atașamente</label>
 <div id="attachmentList"></div>
 </div>
 
@@ -49,12 +35,12 @@ label{display:block;margin:5px 0;}
 </div>
 
 <button id="calcBtn" style="display:none;">Calculează</button>
-
 <div id="result" class="result" style="display:none;"></div>
 </div>
 
 <script>
-// ================== STRUCTURA ARME ==================
+// ==================== DATELE ARME ====================
+// Structură completă cu toate armele și atașamentele conform datelor tale
 const weapons = {
 "PISTOL":{type:"craft",materials:{steel:8,screw:80,barrel:0,spring:1,wood:0,polymer:20},
     bullets:{100:{powder:100,price:5400},200:{powder:200,price:10666},250:{powder:250,price:13333}},
@@ -82,7 +68,7 @@ const weapons = {
 },
 "MACHINE PISTOL (Tec9)":{type:"craft",materials:{steel:12,screw:100,barrel:0,spring:1,wood:0,polymer:38},
     bullets:{100:{powder:150,price:8000},200:{powder:300,price:16000},250:{powder:375,price:20000}},
-    attachments:{incarcator:{steel:2,screw:8,arc:1,polymer:2},amortizor:{steel:2,screw:5,polymer:2}} // Fără baterie
+    attachments:{incarcator:{steel:2,screw:8,arc:1,polymer:2},amortizor:{steel:2,screw:5,polymer:2}}
 },
 "MINI SMG":{type:"craft",materials:{steel:11,screw:97,barrel:0,spring:1,wood:1,polymer:36},
     bullets:{100:{powder:150,price:8000},200:{powder:300,price:16000},250:{powder:375,price:20000}},
@@ -96,7 +82,7 @@ const weapons = {
     bullets:{100:{powder:180,price:10000},200:{powder:360,price:19000},250:{powder:450,price:24000}},
     attachments:{incarcator:{steel:2,screw:10,arc:1,polymer:2},baterie:{steel:3,screw:20,arc:1,polymer:3},lanterna:{steel:1,screw:5,arc:1,polymer:1,bec:1,lupa:1},amortizor:{steel:3,screw:5,polymer:3},luneta:{steel:2,screw:10,polymer:2,lupa:1}}
 },
-// Armele pe bani
+// Arme pe bani
 "NAVY PISTOL":{type:"money",price:400000,attachments:{}},
 "VINTAGE PISTOL":{type:"money",price:25000,attachments:{incarcator:{steel:1,screw:5,arc:1,polymer:1},amortizor:{steel:2,screw:5,polymer:2}}},
 "DB":{type:"money",price:250000,attachments:{}},
@@ -107,95 +93,97 @@ const weapons = {
 "COMBAT MG":{type:"money",price:90000,attachments:{}}
 };
 
-// ================== LOGICA UI PROGRESIV ==================
-const weaponSelectEl = document.getElementById("weaponSelect");
+// ==================== UI PROGRESIV ====================
+const weaponSelect = document.getElementById("weaponSelect");
 const bulletsSection = document.getElementById("bulletsSection");
+const bulletsSelect = document.getElementById("bullets");
 const attachmentsSection = document.getElementById("attachmentsSection");
+const attachmentList = document.getElementById("attachmentList");
 const quantitySection = document.getElementById("quantitySection");
 const calcBtn = document.getElementById("calcBtn");
-const attachList = document.getElementById("attachmentList");
+const resultDiv = document.getElementById("result");
 
 Object.keys(weapons).forEach(w=>{
     const opt = document.createElement("option");
     opt.value=w; opt.text=w;
-    weaponSelectEl.appendChild(opt);
+    weaponSelect.appendChild(opt);
 });
 
-weaponSelectEl.addEventListener("change",()=>{
-    const weapon = weapons[weaponSelectEl.value];
-    document.getElementById("result").style.display="none";
-    attachList.innerHTML="";
-    calcBtn.style.display="none";
+weaponSelect.addEventListener("change",()=>{
+    const weapon = weapons[weaponSelect.value];
     bulletsSection.style.display="none";
     attachmentsSection.style.display="none";
     quantitySection.style.display="none";
+    calcBtn.style.display="none";
+    resultDiv.style.display="none";
+    bulletsSelect.innerHTML="";
+    attachmentList.innerHTML="";
+    document.getElementById("noAttach").checked=false;
 
     if(!weapon) return;
 
-    if(weapon.type==="craft") bulletsSection.style.display="block";
-    attachmentsSection.style.display="block";
+    if(weapon.type==="craft"){
+        bulletsSection.style.display="block";
+        Object.keys(weapon.bullets).forEach(b=>{
+            const opt = document.createElement("option");
+            opt.value=b; opt.text=b;
+            bulletsSelect.appendChild(opt);
+        });
+    }
 
-    // Atașamente
     if(weapon.attachments){
+        attachmentsSection.style.display="block";
         Object.keys(weapon.attachments).forEach(att=>{
             const lbl = document.createElement("label");
             lbl.innerHTML=`<input type="checkbox" class="attachCheck" value="${att}"> ${att}`;
-            attachList.appendChild(lbl);
+            attachmentList.appendChild(lbl);
         });
     }
+
     quantitySection.style.display="block";
     calcBtn.style.display="block";
 });
 
 document.getElementById("noAttach").addEventListener("change",function(){
     const checks = document.querySelectorAll(".attachCheck");
-    if(this.checked){
-        checks.forEach(c=>c.checked=false);
-        checks.forEach(c=>c.disabled=true);
-    }else checks.forEach(c=>c.disabled=false);
+    checks.forEach(c=>c.checked=false);
+    checks.forEach(c=>c.disabled=this.checked);
 });
 
-// ================== CALCUL ==================
+// ==================== CALCUL ====================
 calcBtn.addEventListener("click",()=>{
-    const weaponKey = weaponSelectEl.value;
-    if(!weaponKey) return;
+    const weaponKey = weaponSelect.value;
     const weapon = weapons[weaponKey];
     const qty = parseInt(document.getElementById("weaponQty").value)||1;
-
     const totals = {steel:0,screw:0,barrel:0,spring:0,wood:0,polymer:0,powder:0};
+
     if(weapon.type==="craft"){
         for(let k of ["steel","screw","barrel","spring","wood","polymer"])
             totals[k]+=weapon.materials[k]*qty;
 
-        const bullets = parseInt(document.getElementById("bullets").value);
-        const baseBullet = weapon.bullets[bullets]||weapon.bullets[100];
-        totals.powder += baseBullet.powder*qty;
+        const bulletVal = parseInt(bulletsSelect.value);
+        const bullet = weapon.bullets[bulletVal] || Object.values(weapon.bullets)[0];
+        totals.powder += bullet.powder*qty;
     }
 
-    const selectedAttachments = document.querySelectorAll(".attachCheck:checked");
-    selectedAttachments.forEach(att=>{
+    document.querySelectorAll(".attachCheck:checked").forEach(att=>{
         const data = weapon.attachments[att.value];
         if(!data) return;
         for(let k of ["steel","screw","barrel","spring","wood","polymer"])
             totals[k]+= (data[k]||0)*qty;
     });
 
-    // calcul cost
     let totalCost=0;
     if(weapon.type==="craft"){
         totalCost += totals.steel*5000;
         totalCost += Math.floor(totals.screw/20)*5000;
         totalCost += totals.barrel*4*5000;
         totalCost += totals.polymer*150;
-
-        const bullets = parseInt(document.getElementById("bullets").value);
-        const baseBullet = weapon.bullets[bullets]||weapon.bullets[100];
-        totalCost += baseBullet.price*qty;
+        totalCost += (weapon.bullets[parseInt(bulletsSelect.value)]?.price || 0)*qty;
     } else totalCost += weapon.price*qty;
 
-    const r = document.getElementById("result");
-    r.style.display="block";
-    r.innerHTML=`<h3>Rezultat</h3>
+    resultDiv.style.display="block";
+    resultDiv.innerHTML=`<h3>Rezultat</h3>
     Oțel: ${totals.steel}<br>
     Șurub: ${totals.screw}<br>
     Țeavă: ${totals.barrel}<br>
