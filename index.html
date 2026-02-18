@@ -2,13 +2,13 @@
 <html lang="ro">
 <head>
 <meta charset="UTF-8">
-<title>FiveM Craft Calculator Complet</title>
+<title>FiveM Craft Calculator</title>
 <style>
 body {margin:0;font-family:Arial;background:#111;color:white;display:flex;justify-content:center;padding:20px;}
-.container {background: rgba(0,0,0,0.95);padding:30px;width:1000px;border-radius:10px;transition:all 0.3s;}
+.container {background: rgba(0,0,0,0.95);padding:30px;width:1000px;border-radius:10px;}
 .field {display:flex;align-items:center;margin:10px 0;}
 .field label {width:200px;margin-right:15px;}
-.field select,.field input {flex:1;padding:8px;font-size:14px;border-radius:5px;border:1px solid #444;background:#222;color:white;transition:0.3s;}
+.field select,.field input {flex:1;padding:8px;font-size:14px;border-radius:5px;border:1px solid #444;background:#222;color:white;}
 .field select:hover,.field input:hover {background:#333;}
 .field select:focus,.field input:focus {outline:none;border-color:#2ecc71;}
 button {cursor:pointer;background:#2ecc71;border:none;color:white;font-weight:bold;padding:10px;margin-top:15px;transition:0.3s;}
@@ -19,7 +19,7 @@ h3 {margin:10px 0 5px 0;}
 .attachStep {display:flex;align-items:center;margin:5px 0;opacity:0;transform:translateX(-20px);transition: all 0.4s;}
 .attachStep.show {opacity:1;transform:translateX(0);}
 .attachStep input[type="checkbox"] {margin-right:10px;width:18px;height:18px;accent-color:#2ecc71;cursor:pointer;}
-.attachStep input[type="checkbox"]:hover {transform:scale(1.2);transition:0.2s;}
+.attachStep input[type="checkbox"]:hover {transform:scale(1.2);}
 section {overflow:hidden;max-height:0;opacity:0;transition:max-height 0.5s ease-out, opacity 0.3s;}
 section.show {max-height:500px;opacity:1;}
 .material-steel {color:#2ecc71;}
@@ -74,7 +74,7 @@ const weapons={
 "PISTOL WM29 (XM3)":{type:"craft",materials:{steel:10,screw:95,barrel:0,spring:1,wood:0,polymer:20},bullets:{100:130,200:260,250:325},attachments:{amortizor:{steel:2,screw:5,polymer:2}}}},
 "MICRO SMG":{type:"craft",materials:{steel:15,screw:95,barrel:1,spring:1,wood:0,polymer:42},bullets:{100:150,200:300,250:375},attachments:{luneta:{steel:2,screw:10,polymer:2,lupa:1},lanterna:{steel:1,screw:5,polymer:1,bec:1,lupa:1},amortizor:{steel:3,screw:5,polymer:3},incarcator:{steel:2,screw:10,arc:1,polymer:2}}}},
 "TEC PISTOL (Tactical SMG)":{type:"craft",materials:{steel:14,screw:115,barrel:1,spring:1,wood:0,polymer:44},bullets:{100:150,200:300,250:375},attachments:{luneta:{steel:2,screw:10,polymer:2,lupa:1},incarcator:{steel:2,screw:10,arc:1,polymer:2},suppresor:{steel:3,screw:5,polymer:3}}}},
-"VINTAGE PISTOL":{type:"money",price:25000,attachments:{incarcator:{steel:1,screw:5,arc:1,polymer:1},amortizor:{steel:2,screw:5,polymer:2}}}},
+"VINTAGE PISTOL":{type:"money",price:25000,attachments:{incarcator:{steel:1,screw:5,arc:1,polymer:1},amortizor:{steel:2,screw:5,polymer:2}}},
 "DB":{type:"money",price:250000,attachments:{}},
 "Navy Pistol":{type:"money",price:400000,attachments:{}}
 };
@@ -90,7 +90,7 @@ const calcBtn=document.getElementById("calcBtn");
 const resetBtn=document.getElementById("resetBtn");
 const resultDiv=document.getElementById("result");
 
-// Populare select arme
+// Populare dropdown arme
 Object.keys(weapons).forEach(w=>{
     const opt=document.createElement("option"); opt.value=w; opt.text=w;
     weaponSelect.appendChild(opt);
@@ -99,11 +99,11 @@ Object.keys(weapons).forEach(w=>{
 // ==================== FUNCTII ====================
 function showSection(section){section.classList.add("show");}
 function hideSection(section){section.classList.remove("show");}
-function resetAll(){ 
-    bulletsSelect.innerHTML=""; attachmentList.innerHTML=""; document.getElementById("noAttach").checked=false; 
-    hideSection(bulletsSection); hideSection(attachmentsSection); hideSection(quantitySection); 
-    calcBtn.style.display="none"; resetBtn.style.display="none"; resultDiv.classList.remove("show"); 
-    resultDiv.innerHTML=""; 
+function resetAll(){
+    bulletsSelect.innerHTML=""; attachmentList.innerHTML=""; document.getElementById("noAttach").checked=false;
+    hideSection(bulletsSection); hideSection(attachmentsSection); hideSection(quantitySection);
+    calcBtn.style.display="none"; resetBtn.style.display="none"; resultDiv.classList.remove("show");
+    resultDiv.innerHTML="";
 }
 
 // ==================== LOGIC PROGRESIV ====================
