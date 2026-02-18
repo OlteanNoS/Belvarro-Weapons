@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>FiveM Craft Calculator</title>
+
+<style>
+body{
+    margin:0;
+    font-family:Arial;
+    background:url("background.jpg") no-repeat center center/cover;
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.container{
+    background:rgba(0,0,0,0.85);
+    padding:30px;
+    width:500px;
+    border-radius:10px;
+    color:white;
+}
+
+select, input, button{
+    width:100%;
+    padding:8px;
+    margin-top:10px;
+}
+
+button{
+    cursor:pointer;
+    background:#2ecc71;
+    border:none;
+    color:white;
+    font-weight:bold;
+}
+
+.result{
+    margin-top:20px;
+    padding:15px;
+    background:#111;
+    border-radius:8px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h3>Ce vrei sa craftezi?</h3>
+<select id="weaponSelect">
+<option value="">-- Selecteaza arma --</option>
+<option value="tec9">Machine Pistol (Tec9)</option>
+<option value="navy">Navy Pistol</option>
+</select>
+
+<div id="bulletsSection" style="display:none;">
+<h3>Cate gloante vrei?</h3>
+<select id="bullets">
+<option value="100">100</option>
+<option value="200">200</option>
+<option value="250">250</option>
+<option value="300">300</option>
+<option value="400">400</option>
+<option value="500">500</option>
+<option value="1000">1000</option>
+<option value="2000">2000</option>
+</select>
+</div>
+
+<div id="attachmentsSection" style="display:none;">
+<h3>Atasamente</h3>
+<label><input type="checkbox" value="none" id="noAttach"> Nu vreau atasamente</label>
+<div id="attachmentList"></div>
+</div>
+
+<div id="quantitySection" style="display:none;">
+<h3>Cate arme vrei?</h3>
+<input type="number" id="weaponQty" min="1" value="1">
+</div>
+
+<button onclick="calculate()">Calculeaza</button>
+
+<div id="result" class="result" style="display:none;"></div>
+
+</div>
+
+<script>
+
+const weapons = {
+    tec9:{
+        type:"craft",
+        materials:{steel:12, screw:100, barrel:0, spring:1, wood:0, polymer:38},
+        bullets:{100:{powder:150, price:8000}},
+        attachments:{
+            incarcator:{steel:2, screw:8, spring:1, polymer:2},
+            amortizor:{steel:2, screw:5, polymer:2}
+        }
+    },
+    navy:{
+        type:"money",
+        price:400000,
+        attachments:{}
+    }
+};
+
+document.getElementById("weaponSelect").addEventListener("change", function(){
+
+    const weapon = weapons[this.value];
+
+    document.getElementById("result").style.display="none";
+
+    if(!weapon) return;
+
+    document.getElementById("attachmentsSection").style.display="block";
+    document.getElementById("quantitySection").style.display="block";
+
+    if(weapon.type==="craft"){
+        document.getElementById("bulletsSection").style.display="block";
+    }else{
+        document.getElementById("bulletsSection").style.display="none";
+    }
+
+    const attachDiv=document.getElementById("attachmentList");
+    attachDiv.innerHTML="";
+
+    for(let att in weapon.attachments){
+        attachDiv.innerHTML+=`
+        <label>
+        <input type="checkbox" value="${att}" class="attachCheck"> ${att}
+        </label><br>`;
+    }
+});
+
+document.getElementById("noAttach").addEventListener("change", function(){
+    const checks=document.querySelectorAll(".attachCheck");
+    checks.forEach(c=>c.checked=false);
+});
+
+function calculate(){
+
+    const weaponKey=document.getElementById("weaponSelect").value;
+    const weapon=weapons[weaponKey];
+    if(!weapon) return;
+
+    const qty=parseInt(document.getElementById("weaponQty").value);
+    let totalSteel=0,totalPolymer=0,totalPowder=0,totalCost=0;
+
+    if(weapon.type==="craft"){
+
+        totalSteel+=weapon.materials.steel*qty;
+        totalSteel+=Math.floor((weapon.materials.screw*qty)/20);
+        totalSteel+=weapon.materials.barrel*4*qty;
+        totalPolymer+=weapon.materials.polymer*qty;
+
+        const bullets=parseInt(document.getElementById("bullets").value);
+        const base=weapon.bullets[100];
+        const multiplier=bullets/100;
+
+        totalPowder+=base.powder*multiplier;
+        totalCost+=base.price*multiplier;
+
+        totalCost+=totalSteel*5000;
+        totalCost+=totalPolymer*150;
+    }else{
+        totalCost+=weapon.price*qty;
+    }
+
+    const selectedAttachments=document.querySelectorAll(".attachCheck:checked");
+
+    selectedAttachments.forEach(att=>{
+        const data=weapon.attachments[att.value];
+        totalSteel+=data.steel||0;
+        totalSteel+=Math.floor((data.screw||0)/20);
+        totalPolymer+=data.polymer||0;
+    });
+
+    document.getElementById("result").style.display="block";
+    document.getElementById("result").innerHTML=`
+    <h3>Rezultat</h3>
+    Oțel total: ${totalSteel}<br>
+    Polimer total: ${totalPolymer}<br>
+    Praf de pușcă: ${totalPowder}<br><br>
+    <strong>Cost total estimativ: ${totalCost.toLocaleString()}$</strong>
+    `;
+}
+
+</script>
+
+</body>
+</html>
