@@ -12,15 +12,13 @@ body{
     font-family:Arial;
     padding:20px;
 }
-
 .container{
-    max-width:600px;
+    max-width:700px;
     margin:auto;
     background:#1a1a1a;
     padding:20px;
     border-radius:10px;
 }
-
 select,input,button{
     width:100%;
     padding:10px;
@@ -28,24 +26,24 @@ select,input,button{
     border-radius:5px;
     border:none;
 }
-
 button{
     background:#ff9800;
     color:black;
     font-weight:bold;
     cursor:pointer;
 }
-
 .attachments label{
     display:block;
     margin-top:5px;
 }
-
 .result{
     margin-top:20px;
     background:#111;
     padding:15px;
     border-radius:8px;
+}
+hr{
+    border:1px solid #333;
 }
 </style>
 </head>
@@ -60,9 +58,7 @@ button{
 <option value="">-- Selectează arma --</option>
 </select>
 
-<div id="bulletSection" style="display:none;">
-<select id="bulletSelect"></select>
-</div>
+<select id="bulletSelect" style="display:none;"></select>
 
 <input type="number" id="qty" placeholder="Cantitate arme" value="1">
 
@@ -76,113 +72,78 @@ button{
 
 <script>
 
-const weapons = {
+const weapons = [
 
-pistol:{
-label:"PISTOL",
+{
+name:"PISTOL",
 type:"craft",
 materials:{steel:8,screw:80,spring:1,polymer:20},
-bullets:{powder:100,price:5400},
-attachments:{
-Lanterna:{steel:1,screw:5,polymer:1,bec:1,lupa:1},
-Amortizor:{steel:2,screw:5,polymer:2},
-Incarcator:{steel:1,screw:5,spring:1,polymer:1}
-}
+bullet:{powder:100,price:5400},
+attachments:[
+{name:"Lanternă",data:{steel:1,screw:5,polymer:1,bec:1,lupa:1}},
+{name:"Amortizor",data:{steel:2,screw:5,polymer:2}},
+{name:"Încărcător",data:{steel:1,screw:5,spring:1,polymer:1}}
+]
 },
 
-combat_pistol:{
-label:"COMBAT PISTOL",
-type:"craft",
-materials:{steel:8,screw:85,polymer:18},
-bullets:{powder:100,price:5400},
-attachments:{
-Lanterna:{steel:1,screw:5,polymer:1,bec:1,lupa:1},
-Amortizor:{steel:2,screw:5,polymer:2},
-Incarcator:{steel:1,screw:5,spring:1,polymer:1}
-}
-},
-
-micro_smg:{
-label:"MICRO SMG",
-type:"craft",
-materials:{steel:15,screw:95,spring:1,polymer:42},
-bullets:{powder:150,price:8000},
-attachments:{
-Lanterna:{steel:1,screw:5,polymer:1,bec:1,lupa:1},
-Amortizor:{steel:3,screw:5,polymer:3},
-Incarcator:{steel:2,screw:10,spring:1,polymer:2}
-}
-},
-
-ak:{
-label:"ASSAULT RIFLE (AK)",
+{
+name:"ASSAULT RIFLE (AK)",
 type:"craft",
 materials:{steel:21,screw:135,spring:2,polymer:68},
-bullets:{powder:250,price:13400},
-attachments:{
-Lanterna:{steel:1,screw:5,polymer:1,bec:1,lupa:1},
-Amortizor:{steel:3,screw:5,polymer:3},
-Incarcator:{steel:2,screw:5,spring:1,polymer:2},
-Grip:{steel:1,screw:5,polymer:1}
-}
+bullet:{powder:250,price:13400},
+attachments:[
+{name:"Lanternă",data:{steel:1,screw:5,polymer:1,bec:1,lupa:1}},
+{name:"Amortizor",data:{steel:3,screw:5,polymer:3}},
+{name:"Încărcător",data:{steel:2,screw:5,spring:1,polymer:2}},
+{name:"Grip",data:{steel:1,screw:5,polymer:1}}
+]
 },
 
-navy:{
-label:"Navy Pistol",
+{
+name:"COMBAT MG",
 type:"money",
-price:400000,
-bullets:{powder:100,price:5400},
-attachments:{}
-},
-
-combat_mg: {
-label: "COMBAT MG",
-type: "money",
-price: 120000,
-bullets: { powder: 300, price: 16000 },
-attachments: {
-
-Luneta_Mare: { steel:2, screw:12, polymer:2, lupa:1 },
-Luneta_Medie: { steel:2, screw:10, polymer:2, lupa:1 },
-Incarcator: { steel:1, screw:5, spring:1, polymer:1 },
-Grip: { steel:1, screw:5, polymer:1 },
-Teava: { steel:4, screw:16, polymer:4 },
-Vizor_Holografic: { steel:1, screw:8, polymer:1, lupa:1 },
-
-Slanded_Muzzle_Brake: { steel:1, screw:4, polymer:1 },
-Fat_End_Muzzle_Brake: { steel:1, screw:4, polymer:1 },
-Heavy_Dutty_Muzzle_Brake: { steel:1, screw:4, polymer:1 },
-Precision_Muzzle_Brake: { steel:1, screw:4, polymer:1 },
-Tactical_Muzzle_Brake: { steel:1, screw:4, polymer:1 },
-Flat_Muzzle_Brake: { steel:1, screw:4, polymer:1 },
-Split_End_Muzzle_Brake: { steel:1, screw:4, polymer:1 }
-
+price:120000,
+bullet:{powder:300,price:16000},
+attachments:[
+{name:"Lunetă Mare",data:{steel:2,screw:12,polymer:2,lupa:1}},
+{name:"Lunetă Medie",data:{steel:2,screw:10,polymer:2,lupa:1}},
+{name:"Încărcător",data:{steel:1,screw:5,spring:1,polymer:1}},
+{name:"Grip",data:{steel:1,screw:5,polymer:1}},
+{name:"Țeavă",data:{steel:4,screw:16,polymer:4}},
+{name:"Vizor Holografic",data:{steel:1,screw:8,polymer:1,lupa:1}},
+{name:"Slanded Muzzle Brake",data:{steel:1,screw:4,polymer:1}},
+{name:"Fat End Muzzle Brake",data:{steel:1,screw:4,polymer:1}},
+{name:"Heavy Dutty Muzzle Brake",data:{steel:1,screw:4,polymer:1}},
+{name:"Precision Muzzle Brake",data:{steel:1,screw:4,polymer:1}},
+{name:"Tactical Muzzle Brake",data:{steel:1,screw:4,polymer:1}},
+{name:"Flat Muzzle Brake",data:{steel:1,screw:4,polymer:1}},
+{name:"Split End Muzzle Brake",data:{steel:1,screw:4,polymer:1}}
+]
 }
-},
+
+];
 
 const weaponSelect=document.getElementById("weaponSelect");
 const bulletSelect=document.getElementById("bulletSelect");
-const bulletSection=document.getElementById("bulletSection");
 const attachmentSection=document.getElementById("attachmentSection");
 const result=document.getElementById("result");
 
-Object.keys(weapons).forEach(key=>{
+weapons.forEach((w,index)=>{
     const opt=document.createElement("option");
-    opt.value=key;
-    opt.textContent=weapons[key].label;
+    opt.value=index;
+    opt.textContent=w.name;
     weaponSelect.appendChild(opt);
 });
 
 weaponSelect.addEventListener("change",()=>{
 
-const weapon=weapons[weaponSelect.value];
-
 attachmentSection.innerHTML="";
-bulletSection.style.display="none";
+bulletSelect.innerHTML="";
+bulletSelect.style.display="none";
 
+const weapon=weapons[weaponSelect.value];
 if(!weapon) return;
 
-bulletSelect.innerHTML="";
 for(let i=100;i<=2000;i+=100){
     const opt=document.createElement("option");
     opt.value=i;
@@ -190,11 +151,11 @@ for(let i=100;i<=2000;i+=100){
     bulletSelect.appendChild(opt);
 }
 
-bulletSection.style.display="block";
+bulletSelect.style.display="block";
 
-Object.keys(weapon.attachments).forEach(att=>{
+weapon.attachments.forEach((att,index)=>{
     const label=document.createElement("label");
-    label.innerHTML=`<input type="checkbox" value="${att}"> ${att}`;
+    label.innerHTML=`<input type="checkbox" value="${index}"> ${att.name}`;
     attachmentSection.appendChild(label);
 });
 
@@ -209,39 +170,49 @@ const qty=parseInt(document.getElementById("qty").value)||1;
 const bullets=parseInt(bulletSelect.value)||100;
 
 let totals={steel:0,screw:0,spring:0,polymer:0,bec:0,lupa:0,powder:0};
-let totalCost=0;
+
+let weaponCost=0;
+let bulletCost=0;
 
 if(weapon.type==="craft"){
     Object.keys(weapon.materials).forEach(k=>{
         totals[k]=(totals[k]||0)+(weapon.materials[k]*qty);
     });
+}else{
+    weaponCost=weapon.price*qty;
 }
 
 let multiplier=bullets/100;
-
-totals.powder+=weapon.bullets.powder*multiplier*qty;
-totalCost+=weapon.bullets.price*multiplier*qty;
+totals.powder+=weapon.bullet.powder*multiplier*qty;
+bulletCost=weapon.bullet.price*multiplier*qty;
 
 document.querySelectorAll("#attachmentSection input:checked").forEach(cb=>{
-    const data=weapon.attachments[cb.value];
-    Object.keys(data).forEach(k=>{
-        totals[k]=(totals[k]||0)+(data[k]*qty);
+    const att=weapon.attachments[cb.value].data;
+    Object.keys(att).forEach(k=>{
+        totals[k]=(totals[k]||0)+(att[k]*qty);
     });
 });
 
-if(weapon.type==="money"){
-    totalCost+=weapon.price*qty;
-}
+let total=weaponCost+bulletCost;
 
 result.innerHTML=`
+<h3>Materiale</h3>
 Oțel: ${totals.steel||0}<br>
 Șurub: ${totals.screw||0}<br>
 Arc: ${totals.spring||0}<br>
 Polimer: ${totals.polymer||0}<br>
 Bec: ${totals.bec||0}<br>
 Lupă: ${totals.lupa||0}<br>
-Praf: ${totals.powder||0}<br><br>
-<b>Cost estimativ: ${totalCost.toLocaleString()}$</b>
+Praf: ${totals.powder||0}<br>
+
+<hr>
+
+<h3>Costuri</h3>
+Armă: ${weaponCost.toLocaleString()}$<br>
+Gloanțe: ${bulletCost.toLocaleString()}$<br>
+
+<hr>
+<h2>Total: ${total.toLocaleString()}$</h2>
 `;
 
 });
