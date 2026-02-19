@@ -337,12 +337,11 @@ const calcBtn=document.getElementById("calcBtn");
 const resultDiv=document.getElementById("result");
 
 // Populare select arme
-Object.keys(weapon.bullets).forEach(b=>{
-
-}
+Object.keys(weapons).forEach(w=>{
     const opt=document.createElement("option"); opt.value=w; opt.text=w;
     weaponSelect.appendChild(opt);
 });
+
 
 // ==================== FUNCTII ====================
 function showSection(section){section.classList.add("show");}
