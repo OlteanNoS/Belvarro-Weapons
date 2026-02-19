@@ -337,7 +337,13 @@ const calcBtn=document.getElementById("calcBtn");
 const resultDiv=document.getElementById("result");
 
 // Populare select arme
-Object.keys(weapons).forEach(w=>{
+for(let i=100;i<=2000;i+=100){
+    const opt=document.createElement("option");
+    opt.value=i;
+    opt.text=i;
+    bulletsSelect.appendChild(opt);
+}
+
     const opt=document.createElement("option"); opt.value=w; opt.text=w;
     weaponSelect.appendChild(opt);
 });
