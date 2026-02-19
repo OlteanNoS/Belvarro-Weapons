@@ -13,101 +13,193 @@
   .container{
     background: rgba(0,0,0,0.95);
     padding:30px; width:1000px;
-    border-radius:10px;
+    border-radius:12px;
+    border:1px solid #222;
   }
-  .field{display:flex; align-items:center; margin:10px 0;}
-  .field label{width:220px; margin-right:15px;}
+
+  .topbar{display:flex; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px;}
+  .badge{
+    padding:6px 10px; border-radius:999px;
+    background:#1b1b1b; border:1px solid #2a2a2a;
+    font-size:13px; opacity:.9;
+  }
+
+  h3{margin:10px 0 8px;}
+  .muted{opacity:0.75; font-size:13px;}
+
+  .field{display:flex; align-items:center; margin:10px 0; gap:12px;}
+  .field label{width:220px;}
   .field select,.field input{
-    flex:1; padding:8px; font-size:14px;
-    border-radius:6px; border:1px solid #444;
+    flex:1; padding:9px; font-size:14px;
+    border-radius:8px; border:1px solid #444;
     background:#222; color:#fff;
   }
   .field select:focus,.field input:focus{outline:none; border-color:#2ecc71;}
-  button{
+
+  .row{display:flex; gap:10px; align-items:center; flex-wrap:wrap;}
+  .btn{
     cursor:pointer; background:#2ecc71; border:none;
-    color:#fff; font-weight:bold; padding:10px;
-    margin-top:15px; border-radius:6px;
+    color:#fff; font-weight:bold; padding:10px 12px;
+    border-radius:8px;
   }
-  button:hover{background:#27ae60;}
-  h3{margin:10px 0 8px;}
-  .attachments{margin-top:8px; padding:10px; background:#141414; border-radius:8px;}
-  .attach{margin:6px 0;}
+  .btn:hover{background:#27ae60;}
+  .btn.secondary{background:#1b1b1b; border:1px solid #2a2a2a; font-weight:600;}
+  .btn.secondary:hover{background:#232323;}
+  .btn.danger{background:#c0392b;}
+  .btn.danger:hover{background:#a93226;}
+
+  /* progressive steps */
+  .step{
+    overflow:hidden;
+    max-height:0;
+    opacity:0;
+    transform: translateY(-6px);
+    transition: max-height .35s ease, opacity .25s ease, transform .25s ease;
+    border-left:3px solid transparent;
+    padding-left:0;
+    margin-top:0;
+  }
+  .step.show{
+    max-height:600px;
+    opacity:1;
+    transform: translateY(0);
+    border-left-color:#2ecc71;
+    padding-left:12px;
+    margin-top:10px;
+  }
+
+  .box{
+    background:#141414;
+    border:1px solid #242424;
+    border-radius:12px;
+    padding:12px;
+  }
+
+  .attachments{margin-top:8px;}
+  .attach{margin:7px 0;}
+  .attach input{transform: translateY(1px);}
+
   .result{
-    margin-top:20px; padding:15px; background:#222;
-    border-radius:8px; display:none;
+    margin-top:18px; padding:14px; background:#222;
+    border-radius:12px; display:none;
+    border:1px solid #2a2a2a;
   }
-  .muted{opacity:0.75; font-size:13px;}
-  .row{display:flex; gap:12px; align-items:center; flex-wrap:wrap;}
+  .grid{
+    display:grid; grid-template-columns: 1fr 1fr;
+    gap:12px;
+  }
+  @media (max-width: 900px){
+    .container{width:100%;}
+    .field label{width:150px;}
+    .grid{grid-template-columns:1fr;}
+  }
+
+  hr{border:0; border-top:1px solid #333; margin:12px 0;}
+  .kpi{font-size:20px; font-weight:800;}
 </style>
 </head>
 <body>
 
 <div class="container">
-  <h3>Ce vrei să craftezi?</h3>
-
-  <div class="field">
-    <label for="weaponSelect">Arma:</label>
-    <select id="weaponSelect">
-      <option value="">-- Selectează arma --</option>
-    </select>
+  <div class="topbar">
+    <div class="badge" id="stepBadge">Pas 1/4</div>
+    <div class="badge" id="weaponTypeBadge">—</div>
+    <div class="badge muted">Next level: breakdown + preset + pași + validări + categorii</div>
   </div>
 
-  <div class="field">
-    <label for="bulletsSelect">Gloanțe:</label>
-    <select id="bulletsSelect"></select>
-  </div>
+  <!-- STEP 1: WEAPON -->
+  <div class="box">
+    <h3 style="margin-top:0;">Ce vrei să craftezi?</h3>
 
-  <div class="attachments">
-    <div class="row">
-      <h3 style="margin:0;">Atașamente</h3>
-      <label class="muted" style="margin-left:auto;">
-        <input type="checkbox" id="noAttach" />
-        Nu vreau atașamente
-      </label>
+    <div class="field">
+      <label for="weaponSearch">Caută armă:</label>
+      <input id="weaponSearch" type="text" placeholder="ex: pistol, smg, rifle..." />
     </div>
-    <div id="attachmentsList"></div>
+
+    <div class="field">
+      <label for="weaponSelect">Arma:</label>
+      <select id="weaponSelect">
+        <option value="">-- Selectează arma --</option>
+      </select>
+    </div>
+
+    <div class="row">
+      <button class="btn secondary" id="loadPresetBtn">Încarcă preset</button>
+      <button class="btn secondary" id="savePresetBtn">Salvează preset</button>
+      <button class="btn danger" id="clearPresetBtn">Șterge preset</button>
+      <span class="muted" id="presetStatus"></span>
+    </div>
   </div>
 
-  <div class="field">
-    <label for="qty">Număr arme:</label>
-    <input type="number" id="qty" min="1" value="1"/>
+  <!-- STEP 2: BULLETS -->
+  <div class="step" id="bulletsStep">
+    <div class="box">
+      <h3 style="margin-top:0;">Gloanțe</h3>
+      <div class="field">
+        <label for="bulletsSelect">Cantitate:</label>
+        <select id="bulletsSelect"></select>
+      </div>
+      <div class="muted" id="ammoHint"></div>
+    </div>
   </div>
 
-  <button id="calcBtn">Calculează</button>
+  <!-- STEP 3: ATTACHMENTS -->
+  <div class="step" id="attachmentsStep">
+    <div class="box">
+      <div class="row" style="justify-content:space-between;">
+        <h3 style="margin:0;">Atașamente</h3>
+        <label class="muted">
+          <input type="checkbox" id="noAttach" />
+          Nu vreau atașamente
+        </label>
+      </div>
+
+      <div class="row" style="margin-top:10px;">
+        <button class="btn secondary" id="fullKitBtn">Full kit</button>
+        <button class="btn secondary" id="noKitBtn">No attachments</button>
+      </div>
+
+      <div class="attachments" id="attachmentsList"></div>
+      <div class="muted" id="attachmentsHint"></div>
+    </div>
+  </div>
+
+  <!-- STEP 4: QTY + CALC -->
+  <div class="step" id="qtyStep">
+    <div class="box">
+      <h3 style="margin-top:0;">Cantitate & Calcul</h3>
+      <div class="field">
+        <label for="qty">Număr arme:</label>
+        <input type="number" id="qty" min="1" value="1"/>
+      </div>
+      <button class="btn" id="calcBtn">Calculează</button>
+    </div>
+  </div>
 
   <div id="result" class="result"></div>
 </div>
 
 <script>
-/**
- * REGULI PREȚURI:
- * - 1 oțel = 5000$
- * - 20 șuruburi = 1 oțel => cost șuruburi: floor(screw/20)*5000
- * - polimer = 150$
- * - arc/lemn: ignor cost (infim)
- *
- * GLOANȚE:
- * - EXACT ca în tabel la 100/200/250 (praf + preț)
- * - pentru 300..2000: interpolare / extrapolare liniară pe segmente:
- *    100-200, 200-250, apoi >250 folosește panta 200-250
- * - la armele unde tabelul începe cu 150/300/375 etc. (pe bani),
- *   tot mapăm 100/200/250 folosind exact valorile date (din tabelul tău),
- *   apoi interpolăm la fel (practic funcționează pentru orice 3 puncte).
- */
+/* =========================
+   CONFIG COSTURI
+========================= */
+const COST_STEEL = 5000;
+const COST_POLYMER = 150;
+// șuruburi: 20 = 1 oțel (cum ai avut)
+function costFromScrews(totalScrews){ return Math.floor((totalScrews||0) / 20) * COST_STEEL; }
 
+/* =========================
+   BULLETS OPTIONS 100..2000
+========================= */
 const BULLET_OPTIONS = [];
 for(let b=100;b<=2000;b+=100) BULLET_OPTIONS.push(b);
 
-function att(name, data){ return { name, data }; }
-function emptyTotals(){
-  return {steel:0,screw:0,barrel:0,spring:0,wood:0,polymer:0,bec:0,lupa:0,powder:0};
-}
-
-// -------------------- AMMO TABLE (EXACT din tabelul tău) --------------------
-// IMPORTANT: fiecare armă are exact 3 puncte: 100, 200, 250 (gloanțe).
-// Noi folosim aceste puncte, iar pentru restul (300..2000) facem extrapolare.
+/* =========================
+   AMMO TABLE - EXACT 100/200/250
+   + interpolare/extrapolare până la 2000
+========================= */
 const ammoTable = {
-  // Craft (15)
+  // Craft (în ordinea ta)
   "PISTOL":                   [{b:100,powder:100,price:5400},{b:200,powder:200,price:10666},{b:250,powder:250,price:13333}],
   "COMBAT PISTOL":            [{b:100,powder:100,price:5400},{b:200,powder:200,price:10700},{b:250,powder:250,price:13400}],
   "PISTOL MK2":               [{b:100,powder:130,price:7000},{b:200,powder:260,price:13900},{b:250,powder:325,price:17400}],
@@ -127,7 +219,7 @@ const ammoTable = {
   "CARABINE RIFLE":           [{b:100,powder:300,price:16000},{b:200,powder:600,price:32000},{b:250,powder:750,price:40000}],
   "ADVANCED RIFLE":           [{b:100,powder:300,price:16000},{b:200,powder:600,price:32000},{b:250,powder:750,price:40000}],
 
-  // Pe bani (8) – exact din tabelul tău (blocul “de aici în jos”)
+  // Pe bani (în ordinea ta)
   "Navy Pistol":              [{b:100,powder:500,price:26700},{b:200,powder:1000,price:54000},{b:250,powder:1250,price:66700}],
   "VINTIGE PISTOL":           [{b:100,powder:150,price:8000},{b:200,powder:300,price:16000},{b:250,powder:375,price:20000}],
   "DB":                       [{b:100,powder:500,price:26700},{b:200,powder:1000,price:54000},{b:250,powder:1250,price:66700}],
@@ -138,49 +230,50 @@ const ammoTable = {
   "MG":                       [{b:100,powder:300,price:16000},{b:200,powder:600,price:32000},{b:250,powder:750,price:40000}],
 };
 
-// Interpolare liniară între două puncte
 function lerp(a,b,t){ return a + (b-a)*t; }
 
-// Returnează {powder, price} pentru bullets (100..2000) pe baza celor 3 puncte
 function ammoExactInterpolated(weaponName, bullets){
   const pts = ammoTable[weaponName];
-  if(!pts) return {powder:0, price:0};
+  if(!pts) return {powder:0, price:0, exact:false};
 
-  // asigură ordinea
   const p100 = pts[0], p200 = pts[1], p250 = pts[2];
 
-  if(bullets <= p100.b) return {powder:p100.powder, price:p100.price};
+  // EXACT cases
+  if(bullets === 100) return {powder:p100.powder, price:p100.price, exact:true};
+  if(bullets === 200) return {powder:p200.powder, price:p200.price, exact:true};
+  if(bullets === 250) return {powder:p250.powder, price:p250.price, exact:true};
+
+  if(bullets <= p100.b) return {powder:p100.powder, price:p100.price, exact:false};
 
   if(bullets <= p200.b){
     const t = (bullets - p100.b) / (p200.b - p100.b);
-    return {
-      powder: lerp(p100.powder, p200.powder, t),
-      price:  lerp(p100.price,  p200.price,  t)
-    };
+    return {powder: lerp(p100.powder, p200.powder, t), price: lerp(p100.price, p200.price, t), exact:false};
   }
 
   if(bullets <= p250.b){
     const t = (bullets - p200.b) / (p250.b - p200.b);
-    return {
-      powder: lerp(p200.powder, p250.powder, t),
-      price:  lerp(p200.price,  p250.price,  t)
-    };
+    return {powder: lerp(p200.powder, p250.powder, t), price: lerp(p200.price, p250.price, t), exact:false};
   }
 
-  // > 250: extrapolare cu panta 200-250
+  // extrapolate >250 using slope 200-250
   const slopePowder = (p250.powder - p200.powder) / (p250.b - p200.b);
   const slopePrice  = (p250.price  - p200.price ) / (p250.b - p200.b);
   const extra = bullets - p250.b;
-
-  return {
-    powder: p250.powder + slopePowder * extra,
-    price:  p250.price  + slopePrice  * extra
-  };
+  return {powder: p250.powder + slopePowder * extra, price: p250.price + slopePrice * extra, exact:false};
 }
 
-// ===================== WEAPONS (TOATE) =====================
+/* =========================
+   WEAPONS + ATTACHMENTS
+========================= */
+function att(name, data){ return { name, data }; }
+function emptyTotals(){
+  return {steel:0,screw:0,barrel:0,spring:0,wood:0,polymer:0,bec:0,lupa:0,powder:0};
+}
+
 const weapons = [
+  // =========================
   // CRAFT (în ordinea ta)
+  // =========================
   { name:"PISTOL", type:"craft",
     materials:{steel:8,screw:80,barrel:0,spring:1,wood:0,polymer:20},
     attachments:[
@@ -215,9 +308,7 @@ const weapons = [
   },
   { name:"PISTOL WM29 (XM3)", type:"craft",
     materials:{steel:10,screw:95,barrel:0,spring:1,wood:0,polymer:20},
-    attachments:[
-      att("Amortizor",{steel:2,screw:5,polymer:2})
-    ]
+    attachments:[ att("Amortizor",{steel:2,screw:5,polymer:2}) ]
   },
 
   { name:"MICRO SMG", type:"craft",
@@ -232,16 +323,14 @@ const weapons = [
   { name:"MACHINE PISTOL (Tec9)", type:"craft",
     materials:{steel:12,screw:100,barrel:0,spring:1,wood:0,polymer:38},
     attachments:[
-      // (fără bateria aia, cum ai cerut)
+      // fără "Baterie-Gloante" la Tec9 (cum ai cerut)
       att("Amortizor",{steel:2,screw:5,polymer:2}),
       att("Încărcător",{steel:2,screw:8,spring:1,polymer:2})
     ]
   },
   { name:"MINI SMG", type:"craft",
     materials:{steel:11,screw:97,barrel:0,spring:1,wood:1,polymer:36},
-    attachments:[
-      att("Încărcător",{steel:2,screw:10,spring:1,polymer:2})
-    ]
+    attachments:[ att("Încărcător",{steel:2,screw:10,spring:1,polymer:2}) ]
   },
   { name:"TEC PISTOL (Tactical SMG)", type:"craft",
     materials:{steel:14,screw:115,barrel:1,spring:1,wood:0,polymer:44},
@@ -311,7 +400,9 @@ const weapons = [
     ]
   },
 
+  // =========================
   // PE BANI (în ordinea ta)
+  // =========================
   { name:"Navy Pistol", type:"money", price:400000, attachments:[] },
   { name:"VINTIGE PISTOL", type:"money", price:25000,
     attachments:[
@@ -369,21 +460,70 @@ const weapons = [
   { name:"MG", type:"money", price:90000, attachments:[] }
 ];
 
-// ===================== UI =====================
+/* =========================
+   CATEGORY MAP (6)
+========================= */
+function categoryOf(name){
+  // Pistoale (craft)
+  const pistols = new Set(["PISTOL","COMBAT PISTOL","PISTOL MK2","CERAMIC PISTOL","PISTOL WM29 (XM3)"]);
+  const smgs = new Set(["MICRO SMG","MACHINE PISTOL (Tec9)","MINI SMG","TEC PISTOL (Tactical SMG)","SMG","COMBAT PDW"]);
+  const rifles = new Set(["ASSAULT RIFLE (AK)","COMPACT RIFLE","CARABINE RIFLE","ADVANCED RIFLE"]);
+
+  if(pistols.has(name)) return "Pistoale (Craft)";
+  if(smgs.has(name)) return "SMG (Craft)";
+  if(rifles.has(name)) return "Rifle (Craft)";
+  return "Pe bani";
+}
+
+/* =========================
+   UI Elements
+========================= */
+const weaponSearch = document.getElementById("weaponSearch");
 const weaponSelect = document.getElementById("weaponSelect");
 const bulletsSelect = document.getElementById("bulletsSelect");
 const attachmentsList = document.getElementById("attachmentsList");
 const noAttach = document.getElementById("noAttach");
+
+const bulletsStep = document.getElementById("bulletsStep");
+const attachmentsStep = document.getElementById("attachmentsStep");
+const qtyStep = document.getElementById("qtyStep");
+
+const ammoHint = document.getElementById("ammoHint");
+const attachmentsHint = document.getElementById("attachmentsHint");
+const stepBadge = document.getElementById("stepBadge");
+const weaponTypeBadge = document.getElementById("weaponTypeBadge");
+
+const loadPresetBtn = document.getElementById("loadPresetBtn");
+const savePresetBtn = document.getElementById("savePresetBtn");
+const clearPresetBtn = document.getElementById("clearPresetBtn");
+const presetStatus = document.getElementById("presetStatus");
+
+const fullKitBtn = document.getElementById("fullKitBtn");
+const noKitBtn = document.getElementById("noKitBtn");
+
 const calcBtn = document.getElementById("calcBtn");
 const resultDiv = document.getElementById("result");
 
-function fillWeapons(){
-  weapons.forEach((w,i)=>{
-    const opt = document.createElement("option");
-    opt.value = i;
-    opt.textContent = w.name;
-    weaponSelect.appendChild(opt);
-  });
+/* =========================
+   Progressive Steps (4)
+========================= */
+function setStep(n){
+  stepBadge.textContent = `Pas ${n}/4`;
+}
+function hide(el){ el.classList.remove("show"); }
+function show(el){ el.classList.add("show"); }
+
+function resetFlow(){
+  // hide steps 2-4 and result
+  hide(bulletsStep); hide(attachmentsStep); hide(qtyStep);
+  resultDiv.style.display="none";
+  attachmentsList.innerHTML = "";
+  bulletsSelect.innerHTML = "";
+  ammoHint.textContent = "";
+  attachmentsHint.textContent = "";
+  noAttach.checked = false;
+  weaponTypeBadge.textContent = "—";
+  setStep(1);
 }
 
 function fillBullets(){
@@ -398,11 +538,12 @@ function fillBullets(){
 
 function renderAttachments(w){
   attachmentsList.innerHTML = "";
-  noAttach.checked = false;
+  attachmentsHint.textContent = "";
 
   if(!w.attachments || w.attachments.length===0){
-    attachmentsList.innerHTML = `<div class="muted">Această armă nu are atașamente definite.</div>`;
-    return;
+    // (5) validare: dacă nu are atașamente -> ascunde secțiunea complet
+    attachmentsHint.textContent = "Această armă nu are atașamente.";
+    return false; // no attachments
   }
 
   w.attachments.forEach((a,idx)=>{
@@ -411,108 +552,379 @@ function renderAttachments(w){
     div.innerHTML = `<label><input type="checkbox" class="attCheck" value="${idx}"> ${a.name}</label>`;
     attachmentsList.appendChild(div);
   });
+  return true;
 }
 
-weaponSelect.addEventListener("change", ()=>{
+function getSelectedWeapon(){
   const idx = weaponSelect.value;
-  if(idx === "") {
-    attachmentsList.innerHTML="";
+  if(idx==="") return null;
+  return weapons[Number(idx)];
+}
+
+function updateWeaponTypeBadge(w){
+  weaponTypeBadge.textContent = `${categoryOf(w.name)} • ${w.type === "craft" ? "Craft" : "Pe bani"}`;
+}
+
+/* =========================
+   Build weapon select with categories (6)
+   + Search filter
+========================= */
+function buildWeaponSelect(filterText=""){
+  const current = weaponSelect.value;
+  weaponSelect.innerHTML = `<option value="">-- Selectează arma --</option>`;
+
+  const groups = new Map(); // label -> array of {weapon,index}
+  weapons.forEach((w,idx)=>{
+    const label = categoryOf(w.name);
+    if(!groups.has(label)) groups.set(label, []);
+    groups.get(label).push({w, idx});
+  });
+
+  const order = ["Pistoale (Craft)","SMG (Craft)","Rifle (Craft)","Pe bani"];
+  const ft = (filterText||"").trim().toLowerCase();
+
+  order.forEach(label=>{
+    if(!groups.has(label)) return;
+    const optgroup = document.createElement("optgroup");
+    optgroup.label = label;
+
+    groups.get(label).forEach(({w, idx})=>{
+      if(ft && !w.name.toLowerCase().includes(ft)) return;
+      const opt = document.createElement("option");
+      opt.value = idx;
+      opt.textContent = w.name;
+      optgroup.appendChild(opt);
+    });
+
+    // adaugă grupul doar dacă are opțiuni
+    if(optgroup.children.length > 0) weaponSelect.appendChild(optgroup);
+  });
+
+  // încearcă să păstrezi selecția dacă încă există
+  if(current !== ""){
+    const exists = [...weaponSelect.querySelectorAll("option")].some(o=>o.value===current);
+    weaponSelect.value = exists ? current : "";
+  }
+}
+
+/* =========================
+   (3) Presets
+   Salvează/încarcă: weapon index, bullets, qty, noAttach, selected attachments
+========================= */
+const PRESET_KEY = "fivem_craft_preset_v1";
+
+function savePreset(){
+  const w = getSelectedWeapon();
+  if(!w){ presetStatus.textContent = "Selectează o armă înainte."; return; }
+
+  const preset = {
+    weaponIndex: Number(weaponSelect.value),
+    bullets: Number(bulletsSelect.value || 100),
+    qty: Number(document.getElementById("qty").value || 1),
+    noAttach: !!noAttach.checked,
+    selectedAtt: []
+  };
+
+  if(w.attachments && w.attachments.length && !preset.noAttach){
+    document.querySelectorAll(".attCheck:checked").forEach(cb=>{
+      preset.selectedAtt.push(Number(cb.value));
+    });
+  }
+
+  localStorage.setItem(PRESET_KEY, JSON.stringify(preset));
+  presetStatus.textContent = "Preset salvat.";
+}
+
+function loadPreset(){
+  const raw = localStorage.getItem(PRESET_KEY);
+  if(!raw){ presetStatus.textContent = "Nu există preset salvat."; return; }
+
+  let preset;
+  try{ preset = JSON.parse(raw); }catch(e){ presetStatus.textContent="Preset corupt."; return; }
+
+  // aplică
+  weaponSelect.value = String(preset.weaponIndex ?? "");
+  if(weaponSelect.value===""){ presetStatus.textContent="Preset invalid."; return; }
+
+  // declanșează flow
+  handleWeaponChange(true);
+
+  // bullets & qty
+  bulletsSelect.value = String(preset.bullets ?? 100);
+  document.getElementById("qty").value = String(preset.qty ?? 1);
+
+  // attachments
+  noAttach.checked = !!preset.noAttach;
+  syncNoAttachUI();
+
+  if(!noAttach.checked && Array.isArray(preset.selectedAtt)){
+    preset.selectedAtt.forEach(i=>{
+      const cb = attachmentsList.querySelector(`.attCheck[value="${i}"]`);
+      if(cb) cb.checked = true;
+    });
+  }
+
+  presetStatus.textContent = "Preset încărcat.";
+}
+
+function clearPreset(){
+  localStorage.removeItem(PRESET_KEY);
+  presetStatus.textContent = "Preset șters.";
+}
+
+/* =========================
+   Attachments helpers (3 + 5)
+========================= */
+function syncNoAttachUI(){
+  const checks = attachmentsList.querySelectorAll(".attCheck");
+  if(noAttach.checked){
+    // (5) ascunde lista, nu doar disable
+    checks.forEach(c=>{ c.checked=false; c.disabled=true; });
+    attachmentsList.style.display="none";
+    attachmentsHint.textContent = "Atașamentele NU sunt luate în calcul.";
+  }else{
+    checks.forEach(c=>{ c.disabled=false; });
+    attachmentsList.style.display="";
+    attachmentsHint.textContent = "";
+  }
+}
+
+function fullKit(){
+  noAttach.checked = false;
+  syncNoAttachUI();
+  attachmentsList.querySelectorAll(".attCheck").forEach(c=> c.checked=true);
+}
+
+function noKit(){
+  noAttach.checked = true;
+  syncNoAttachUI();
+}
+
+/* =========================
+   Flow events (4 + 5)
+========================= */
+function handleWeaponChange(fromPreset=false){
+  resultDiv.style.display="none";
+
+  const w = getSelectedWeapon();
+  if(!w){
+    resetFlow();
     return;
   }
-  const w = weapons[Number(idx)];
+
+  updateWeaponTypeBadge(w);
+
+  // step 2 show
   fillBullets();
-  renderAttachments(w);
+  show(bulletsStep);
+  setStep(2);
+
+  // ammo hint for 100/200/250 exact
+  const p = ammoTable[w.name];
+  if(p){
+    ammoHint.textContent =
+      `EXACT în tabel: 100 → ${p[0].powder} praf / ${p[0].price}$ • 200 → ${p[1].powder} / ${p[1].price}$ • 250 → ${p[2].powder} / ${p[2].price}$. 300-2000 sunt interpolate.`;
+  }else{
+    ammoHint.textContent = "Nu există tabel gloanțe pentru arma asta.";
+  }
+
+  // attachments depend on weapon: show later after bullets chosen (pas 3)
+  hide(attachmentsStep);
+  hide(qtyStep);
+
+  // if from preset, don't force user to change bullets manually; we'll show attachments step now
+  if(fromPreset){
+    handleBulletsChange(true);
+  }
+}
+
+function handleBulletsChange(fromPreset=false){
+  const w = getSelectedWeapon();
+  if(!w) return;
+
+  // step 3: attachments OR skip if none
+  const hasAtt = renderAttachments(w);
+
+  if(hasAtt){
+    show(attachmentsStep);
+    setStep(3);
+    // reset noAttach UI state
+    noAttach.checked = false;
+    syncNoAttachUI();
+  }else{
+    hide(attachmentsStep);
+  }
+
+  // step 4 show always
+  show(qtyStep);
+  setStep(hasAtt ? 4 : 4);
+}
+
+weaponSelect.addEventListener("change", ()=>handleWeaponChange(false));
+bulletsSelect.addEventListener("change", ()=>handleBulletsChange(false));
+noAttach.addEventListener("change", syncNoAttachUI);
+
+fullKitBtn.addEventListener("click", fullKit);
+noKitBtn.addEventListener("click", noKit);
+
+savePresetBtn.addEventListener("click", savePreset);
+loadPresetBtn.addEventListener("click", loadPreset);
+clearPresetBtn.addEventListener("click", clearPreset);
+
+weaponSearch.addEventListener("input", (e)=>{
+  buildWeaponSelect(e.target.value);
+  // dacă filtrarea a scos selecția, resetează flow
+  if(weaponSelect.value==="") resetFlow();
 });
 
-noAttach.addEventListener("change", ()=>{
-  document.querySelectorAll(".attCheck").forEach(c=>{
-    c.checked = false;
-    c.disabled = noAttach.checked;
+/* =========================
+   CALCUL (2 + 5)
+   - breakdown pe costuri
+   - materiale: armă (craft) + atașamente + praf
+========================= */
+function sumInto(dst, src, mult=1){
+  Object.keys(src||{}).forEach(k=>{
+    dst[k] = (dst[k]||0) + (src[k]||0) * mult;
   });
-});
+}
 
-// cost materiale (cum aveai)
 function estimateMaterialsCost(t){
   let cost = 0;
-  cost += (t.steel||0) * 5000;
-  cost += Math.floor((t.screw||0) / 20) * 5000;
-  cost += (t.polymer||0) * 150;
+  cost += (t.steel||0) * COST_STEEL;
+  cost += costFromScrews(t.screw||0);
+  cost += (t.polymer||0) * COST_POLYMER;
   return cost;
 }
 
 function calculate(){
-  const idx = weaponSelect.value;
-  if(idx === "") { alert("Selectează o armă!"); return; }
+  const w = getSelectedWeapon();
+  if(!w){ alert("Selectează o armă!"); return; }
 
-  const w = weapons[Number(idx)];
   const qty = Math.max(1, parseInt(document.getElementById("qty").value || "1",10));
   const bullets = parseInt(bulletsSelect.value || "100",10);
 
-  const totals = emptyTotals();
-  let totalCost = 0;
+  const baseTotals = emptyTotals();     // materiale armă (doar craft)
+  const attTotals  = emptyTotals();     // materiale atașamente
+  const ammoTotals = emptyTotals();     // doar praf (și costul de gloanțe separat)
+  const grandTotals= emptyTotals();     // total agregat
 
-  // 1) arma (materiale doar la craft)
+  // costs breakdown
+  let costWeapon = 0;
+  let costAmmo   = 0;
+  let costMats   = 0;
+
+  // 1) arma
   if(w.type === "craft"){
-    Object.keys(w.materials || {}).forEach(k=>{
-      totals[k] = (totals[k]||0) + (w.materials[k]||0)*qty;
-    });
+    sumInto(baseTotals, w.materials, qty);
   }else{
-    totalCost += (w.price || 0) * qty;
+    costWeapon = (w.price || 0) * qty;
   }
 
-  // 2) gloanțe: EXACT 100/200/250 + interpolare până la 2000
+  // 2) ammo exact+interp
   const ammoOne = ammoExactInterpolated(w.name, bullets);
-  totals.powder += ammoOne.powder * qty;
-  totalCost += ammoOne.price * qty;
+  ammoTotals.powder += (ammoOne.powder || 0) * qty;
+  costAmmo += (ammoOne.price || 0) * qty;
 
-  // 3) atașamente
-  if(!noAttach.checked && w.attachments && w.attachments.length){
-    document.querySelectorAll(".attCheck:checked").forEach(cb=>{
-      const a = w.attachments[Number(cb.value)];
+  // 3) attachments
+  if(w.attachments && w.attachments.length && !noAttach.checked){
+    const selected = Array.from(document.querySelectorAll(".attCheck:checked")).map(cb=>Number(cb.value));
+    selected.forEach(i=>{
+      const a = w.attachments[i];
       if(!a || !a.data) return;
-      Object.keys(a.data).forEach(k=>{
-        totals[k] = (totals[k]||0) + (a.data[k]||0)*qty;
-      });
+      sumInto(attTotals, a.data, qty);
     });
   }
 
-  // 4) cost materiale
-  totalCost += estimateMaterialsCost(totals);
+  // 4) total materials
+  sumInto(grandTotals, baseTotals, 1);
+  sumInto(grandTotals, attTotals, 1);
+  sumInto(grandTotals, ammoTotals, 1);
 
+  // 5) materials cost (doar oțel/șuruburi/polimer)
+  costMats = estimateMaterialsCost(grandTotals);
+
+  const total = Math.round(costWeapon + costAmmo + costMats);
+
+  // UI
   resultDiv.style.display="block";
   resultDiv.innerHTML = `
-    <h3>Rezultat</h3>
-    <div><b>Arma:</b> ${w.name}</div>
-    <div><b>Tip:</b> ${w.type === "craft" ? "Craft" : "Pe bani"}</div>
-    <div><b>Arme:</b> ${qty}</div>
-    <div><b>Gloanțe:</b> ${bullets}</div>
-    <hr style="border:1px solid #333">
+    <h3>Rezultat (Breakdown)</h3>
 
-    <h3>Materiale</h3>
-    Oțel: ${Math.round(totals.steel||0)}<br>
-    Șuruburi: ${Math.round(totals.screw||0)}<br>
-    Țeavă: ${Math.round(totals.barrel||0)}<br>
-    Arc: ${Math.round(totals.spring||0)}<br>
-    Lemn: ${Math.round(totals.wood||0)}<br>
-    Polimer: ${Math.round(totals.polymer||0)}<br>
-    Bec: ${Math.round(totals.bec||0)}<br>
-    Lupă: ${Math.round(totals.lupa||0)}<br>
-    Praf de pușcă: ${Math.round(totals.powder||0)}<br>
+    <div class="grid">
+      <div class="box">
+        <div><b>Arma:</b> ${w.name}</div>
+        <div><b>Tip:</b> ${w.type === "craft" ? "Craft" : "Pe bani"}</div>
+        <div><b>Arme:</b> ${qty}</div>
+        <div><b>Gloanțe:</b> ${bullets}</div>
+        <div class="muted" style="margin-top:8px;">
+          100/200/250 sunt EXACT din tabel. Restul sunt interpolate până la 2000.
+        </div>
+      </div>
 
-    <hr style="border:1px solid #333">
-    <h3>Cost total estimativ</h3>
-    <b>${Math.round(totalCost).toLocaleString()}$</b>
-    <div class="muted" style="margin-top:6px;">
-      Include: preț armă (dacă e pe bani) + preț gloanțe (EXACT 100/200/250, interpolat până la 2000) + materiale (oțel/șuruburi/polimer).
+      <div class="box">
+        <div class="muted">Total final</div>
+        <div class="kpi">${total.toLocaleString()}$</div>
+        <hr>
+        <div><b>Cost armă:</b> ${Math.round(costWeapon).toLocaleString()}$</div>
+        <div><b>Cost gloanțe:</b> ${Math.round(costAmmo).toLocaleString()}$</div>
+        <div><b>Cost materiale:</b> ${Math.round(costMats).toLocaleString()}$</div>
+        <div class="muted" style="margin-top:6px;">
+          Materiale cost: oțel + (șuruburi/20)*oțel + polimer.
+        </div>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class="grid">
+      <div class="box">
+        <h3 style="margin-top:0;">Materiale (Total)</h3>
+        Oțel: ${Math.round(grandTotals.steel||0)}<br>
+        Șuruburi: ${Math.round(grandTotals.screw||0)}<br>
+        Țeavă: ${Math.round(grandTotals.barrel||0)}<br>
+        Arc: ${Math.round(grandTotals.spring||0)}<br>
+        Lemn: ${Math.round(grandTotals.wood||0)}<br>
+        Polimer: ${Math.round(grandTotals.polymer||0)}<br>
+        Bec: ${Math.round(grandTotals.bec||0)}<br>
+        Lupă: ${Math.round(grandTotals.lupa||0)}<br>
+        Praf de pușcă: ${Math.round(grandTotals.powder||0)}<br>
+      </div>
+
+      <div class="box">
+        <h3 style="margin-top:0;">Separat</h3>
+        <b>Armă (Craft):</b><br>
+        Oțel: ${Math.round(baseTotals.steel||0)} • Șuruburi: ${Math.round(baseTotals.screw||0)} • Polimer: ${Math.round(baseTotals.polymer||0)}<br>
+        <span class="muted">(+ țeavă/arc/lemn după tabel)</span>
+
+        <hr>
+
+        <b>Atașamente:</b><br>
+        Oțel: ${Math.round(attTotals.steel||0)} • Șuruburi: ${Math.round(attTotals.screw||0)} • Polimer: ${Math.round(attTotals.polymer||0)} • Bec: ${Math.round(attTotals.bec||0)} • Lupă: ${Math.round(attTotals.lupa||0)}
+
+        <hr>
+
+        <b>Gloanțe:</b><br>
+        Praf: ${Math.round(ammoTotals.powder||0)}<br>
+        <span class="muted">Cost gloanțe inclus separat (${Math.round(costAmmo).toLocaleString()}$).</span>
+      </div>
     </div>
   `;
+
+  // scroll to result
+  resultDiv.scrollIntoView({behavior:"smooth", block:"start"});
 }
 
 calcBtn.addEventListener("click", calculate);
 
-// init
-fillWeapons();
+/* =========================
+   INIT
+========================= */
+buildWeaponSelect("");
+resetFlow();
 fillBullets();
+
+// preset status
+if(localStorage.getItem(PRESET_KEY)) presetStatus.textContent = "Ai un preset salvat.";
 </script>
 
 </body>
