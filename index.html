@@ -228,12 +228,12 @@ const weaponSelect=document.getElementById("weaponSelect");
 const bulletsSelect=document.getElementById("bullets");
 const attachmentsDiv=document.getElementById("attachments");
 
-Object.keys(weapons).forEach(w=>{
-    let opt=document.createElement("option");
-    opt.value=w;
-    opt.textContent=w;
-    weaponSelect.appendChild(opt);
-});
+for(let i=100;i<=2000;i+=100){
+    const opt=document.createElement("option");
+    opt.value=i;
+    opt.text=i;
+    bulletsSelect.appendChild(opt);
+}
 
 weaponSelect.addEventListener("change",()=>{
     const weapon=weapons[weaponSelect.value];
