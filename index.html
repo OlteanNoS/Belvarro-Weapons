@@ -70,11 +70,11 @@ button{
 
 const weapons = {
 
-  // ---------------- PISTOL ----------------
-  "PISTOL": {
+  // ================= PISTOLS =================
+  "PISTOL":{
     type:"craft",
     materials:{steel:8,screw:80,polymer:20},
-    bullets:{100:100,200:200,500:500,1000:1000},
+    bullets:{100:100,200:200,250:250,300:300,400:400,500:500,1000:1000,2000:2000},
     attachments:{
       lanterna:{steel:1,screw:5},
       amortizor:{steel:2,screw:5},
@@ -82,10 +82,10 @@ const weapons = {
     }
   },
 
-  "COMBATPISTOL": {
+  "COMBAT PISTOL":{
     type:"craft",
-    materials:{steel:10,screw:90,polymer:25},
-    bullets:{100:100,200:200,500:500,1000:1000},
+    materials:{steel:8,screw:85,polymer:18},
+    bullets:{100:100,200:200,250:250,300:300,400:400,500:500,1000:1000,2000:2000},
     attachments:{
       lanterna:{steel:1,screw:5},
       amortizor:{steel:2,screw:5},
@@ -93,189 +93,160 @@ const weapons = {
     }
   },
 
-  // ---------------- SMG ----------------
-  "SMG": {
+  "PISTOL MK2":{
     type:"craft",
-    materials:{steel:15,screw:120,polymer:40},
-    bullets:{200:200,500:500,1000:1000},
+    materials:{steel:9,screw:91,polymer:22},
+    bullets:{100:130,200:260,250:325,300:390,400:520,500:650,1000:1300,2000:2600},
+    attachments:{
+      lanterna:{steel:1,screw:5},
+      amortizor:{steel:2,screw:5},
+      incarcator:{steel:1,screw:5},
+      scope:{steel:2,screw:10}
+    }
+  },
+
+  "CERAMIC PISTOL":{
+    type:"craft",
+    materials:{steel:9,screw:91,polymer:18},
+    bullets:{100:130,200:260,250:325,300:390,400:520,500:650,1000:1300,2000:2600},
+    attachments:{
+      amortizor:{steel:2,screw:5},
+      incarcator:{steel:1,screw:5}
+    }
+  },
+
+  "PISTOL WM29 (XM3)":{
+    type:"craft",
+    materials:{steel:10,screw:95,polymer:20},
+    bullets:{100:130,200:260,250:325,300:390,400:520,500:650,1000:1300,2000:2600},
+    attachments:{
+      amortizor:{steel:2,screw:5}
+    }
+  },
+
+  // ================= SMG =================
+  "MICRO SMG":{
+    type:"craft",
+    materials:{steel:15,screw:95,polymer:42},
+    bullets:{100:150,200:300,250:375,300:450,400:600,500:750,1000:1500,2000:3000},
     attachments:{
       lanterna:{steel:1,screw:5},
       amortizor:{steel:3,screw:5},
-      incarcator_extins:{steel:2,screw:10}
+      incarcator:{steel:2,screw:10},
+      scope:{steel:2,screw:10}
     }
   },
 
-  "MICROSMG": {
+  "MACHINE PISTOL (Tec9)":{
     type:"craft",
-    materials:{steel:14,screw:110,polymer:35},
-    bullets:{200:200,500:500,1000:1000},
+    materials:{steel:12,screw:100,polymer:38},
+    bullets:{100:150,200:300,250:375,300:450,400:600,500:750,1000:1500,2000:3000},
     attachments:{
-      lanterna:{steel:1,screw:5},
-      amortizor:{steel:3,screw:5}
+      amortizor:{steel:2,screw:5},
+      incarcator:{steel:2,screw:8}
     }
   },
 
-  // ---------------- RIFLE ----------------
-  "ASSAULTRIFLE": {
+  "MINI SMG":{
     type:"craft",
-    materials:{steel:25,screw:180,polymer:60},
-    bullets:{200:200,500:500,1000:1000},
+    materials:{steel:11,screw:97,polymer:36},
+    bullets:{100:150,200:300,250:375,300:450,400:600,500:750,1000:1500,2000:3000},
     attachments:{
-      lanterna:{steel:2,screw:5},
-      amortizor:{steel:4,screw:10},
-      incarcator_extins:{steel:3,screw:10}
+      incarcator:{steel:2,screw:10}
     }
   },
 
-  "CARBINERIFLE": {
+  "TEC PISTOL (Tactical SMG)":{
     type:"craft",
-    materials:{steel:28,screw:200,polymer:70},
-    bullets:{200:200,500:500,1000:1000},
+    materials:{steel:14,screw:115,polymer:44},
+    bullets:{100:180,200:360,250:450,300:540,400:720,500:900,1000:1800,2000:3600},
     attachments:{
-      lanterna:{steel:2,screw:5},
-      amortizor:{steel:4,screw:10},
-      incarcator_extins:{steel:3,screw:10}
+      amortizor:{steel:3,screw:5},
+      incarcator:{steel:2,screw:10},
+      scope:{steel:2,screw:10}
     }
   },
 
-  // ---------------- SHOTGUN ----------------
-  "PUMPSHOTGUN": {
+  "SMG":{
     type:"craft",
-    materials:{steel:20,screw:150,polymer:40},
-    bullets:{50:50,100:100,200:200},
+    materials:{steel:13,screw:105,polymer:48},
+    bullets:{100:180,200:360,250:450,300:540,400:720,500:900,1000:1800,2000:3600},
     attachments:{
+      amortizor:{steel:3,screw:5},
+      incarcator:{steel:2,screw:10},
+      scope:{steel:2,screw:10},
       lanterna:{steel:1,screw:5}
     }
   },
 
-  // ---------------- HEAVY (PE BANI) ----------------
-  "HEAVYRIFLE": {
-    type:"money",
-    price:60000,
+  "COMBAT PDW":{
+    type:"craft",
+    materials:{steel:14,screw:110,polymer:50},
+    bullets:{100:180,200:360,250:450,300:540,400:720,500:900,1000:1800,2000:3600},
     attachments:{
-      lanterna:{steel:2,screw:5},
-      amortizor:{steel:4,screw:10},
-      incarcator_extins:{steel:3,screw:10}
+      incarcator:{steel:2,screw:10},
+      scope:{steel:2,screw:10},
+      lanterna:{steel:1,screw:5},
+      grip:{steel:1,screw:5}
     }
   },
 
-  "MINIGUN": {
-    type:"money",
-    price:250000,
-    attachments:{}
-  },
-
-  "RPG": {
-    type:"money",
-    price:300000,
-    attachments:{}
-  },
-
-  "SNIPERRIFLE": {
-    type:"money",
-    price:120000,
+  // ================= RIFLES =================
+  "ASSAULT RIFLE (AK)":{
+    type:"craft",
+    materials:{steel:21,screw:135,polymer:68},
+    bullets:{100:250,200:500,250:625,300:750,400:1000,500:1250,1000:2500,2000:5000},
     attachments:{
-      luneta:{steel:3,screw:10}
+      amortizor:{steel:3,screw:5},
+      incarcator:{steel:2,screw:5},
+      scope:{steel:2,screw:10},
+      lanterna:{steel:1,screw:5},
+      grip:{steel:1,screw:5}
     }
-  }
+  },
+
+  "COMPACT RIFLE":{
+    type:"craft",
+    materials:{steel:19,screw:115,polymer:44},
+    bullets:{100:250,200:500,250:625,300:750,400:1000,500:1250,1000:2500,2000:5000},
+    attachments:{
+      incarcator:{steel:3,screw:30}
+    }
+  },
+
+  "CARABINE RIFLE":{
+    type:"craft",
+    materials:{steel:18,screw:140,polymer:72},
+    bullets:{100:300,200:600,250:750,300:900,400:1200,500:1500,1000:3000,2000:6000},
+    attachments:{
+      amortizor:{steel:3,screw:5},
+      incarcator:{steel:1,screw:5},
+      scope:{steel:2,screw:10},
+      lanterna:{steel:1,screw:5},
+      grip:{steel:1,screw:5}
+    }
+  },
+
+  "ADVANCED RIFLE":{
+    type:"craft",
+    materials:{steel:18,screw:145,polymer:78},
+    bullets:{100:300,200:600,250:750,300:900,400:1200,500:1500,1000:3000,2000:6000},
+    attachments:{
+      amortizor:{steel:3,screw:5},
+      incarcator:{steel:1,screw:5},
+      scope:{steel:2,screw:10},
+      lanterna:{steel:1,screw:5}
+    }
+  },
+
+  // ================= MONEY WEAPONS =================
+  "Navy Pistol":{type:"money",price:400000,attachments:{incarcator:{steel:1,screw:5},amortizor:{steel:2,screw:5}}},
+  "VINTIGE PISTOL":{type:"money",price:25000,attachments:{incarcator:{steel:1,screw:5}}},
+  "DB":{type:"money",price:250000,attachments:{incarcator:{steel:1,screw:5}}},
+  "ASSAULTRIFLE MK2 (AK)":{type:"money",price:70000,attachments:{incarcator:{steel:2,screw:5},scope:{steel:2,screw:12},amortizor:{steel:3,screw:5}}},
+  "HEAVYRIFLE":{type:"money",price:60000,attachments:{incarcator:{steel:1,screw:5},amortizor:{steel:3,screw:5},scope:{steel:2,screw:10},lanterna:{steel:1,screw:5},grip:{steel:1,screw:5}}},
+  "COMBAT MG":{type:"money",price:120000,attachments:{incarcator:{steel:1,screw:5},scope:{steel:2,screw:12},lanterna:{steel:1,screw:5},grip:{steel:1,screw:5}}},
+  "GUSENBERG":{type:"money",price:45000,attachments:{incarcator:{steel:1,screw:5}}},
+  "MG":{type:"money",price:90000,attachments:{incarcator:{steel:1,screw:5}}}
 
 };
-
-
-const weaponSelect=document.getElementById("weaponSelect");
-const bulletsSelect=document.getElementById("bullets");
-const attachmentsDiv=document.getElementById("attachments");
-
-Object.keys(weapons).forEach(w=>{
-    let opt=document.createElement("option");
-    opt.value=w;
-    opt.textContent=w;
-    weaponSelect.appendChild(opt);
-});
-
-weaponSelect.addEventListener("change",function(){
-
-    const weapon=weapons[this.value];
-
-    bulletsSelect.style.display="none";
-    bulletsSelect.innerHTML="";
-    attachmentsDiv.innerHTML="";
-
-    if(!weapon) return;
-
-    if(weapon.type==="craft"){
-        bulletsSelect.style.display="block";
-        Object.keys(weapon.bullets).forEach(b=>{
-            let opt=document.createElement("option");
-            opt.value=b;
-            opt.textContent=b+" gloanțe";
-            bulletsSelect.appendChild(opt);
-        });
-    }
-
-    if(weapon.attachments){
-        Object.keys(weapon.attachments).forEach(att=>{
-            attachmentsDiv.innerHTML+=
-            `<label>
-                <input type="checkbox" value="${att}">
-                ${att}
-            </label><br>`;
-        });
-    }
-
-});
-
-function calculate(){
-
-    const weapon=weapons[weaponSelect.value];
-    const qty=parseInt(document.getElementById("qty").value)||1;
-
-    if(!weapon){
-        alert("Selectează o armă!");
-        return;
-    }
-
-    let steel=0;
-    let screw=0;
-    let polymer=0;
-    let powder=0;
-    let totalCost=0;
-
-    if(weapon.type==="craft"){
-        steel+=weapon.materials.steel*qty;
-        screw+=weapon.materials.screw*qty;
-        polymer+=weapon.materials.polymer*qty;
-
-        const bullets=parseInt(bulletsSelect.value);
-        powder+=weapon.bullets[bullets]*qty;
-
-        totalCost+=steel*5000;
-        totalCost+=Math.floor(screw/20)*5000;
-        totalCost+=polymer*150;
-        totalCost+=powder*150;
-    }
-
-    if(weapon.type==="money"){
-        totalCost+=weapon.price*qty;
-    }
-
-    document.querySelectorAll("#attachments input:checked").forEach(box=>{
-        const data=weapon.attachments[box.value];
-        steel+= (data.steel||0)*qty;
-        screw+= (data.screw||0)*qty;
-    });
-
-    document.getElementById("result").innerHTML=
-    `
-    Oțel: ${steel}<br>
-    Șuruburi: ${screw}<br>
-    Polimer: ${polymer}<br>
-    Praf de pușcă: ${powder}<br><br>
-    <strong>Cost total: ${totalCost}$</strong>
-    `;
-}
-
-</script>
-
-</body>
-</html>
