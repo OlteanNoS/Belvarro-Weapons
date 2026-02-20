@@ -333,10 +333,7 @@
   .tag{font-size:11px; padding:3px 8px; border-radius:999px; border:1px solid var(--border); background:#141414; opacity:.85;}
 
   /* ✅ buton clar de select */
-  .wActions{
-    padding:10px;
-    padding-top:0;
-  }
+  .wActions{padding:10px; padding-top:0;}
   .wSelectBtn{
     width:100%;
     display:inline-flex;
@@ -848,7 +845,7 @@ function imageForWeapon(name){
 }
 
 /* =========================
-   UI elements
+   UI
 ========================= */
 const openWeaponModalBtn = document.getElementById("openWeaponModalBtn");
 const selectedWeaponLabel = document.getElementById("selectedWeaponLabel");
@@ -1036,7 +1033,7 @@ function matCardHTML(key, value){
 }
 
 /* =========================
-   RENDER result
+   RENDER result + (tool) Copy Discord
 ========================= */
 function renderResult(out, isPreview){
   resultDiv.style.display="block";
@@ -1069,6 +1066,8 @@ function renderResult(out, isPreview){
         <div><b>Cost armă:</b> ${Math.round(out.costWeapon).toLocaleString()}$</div>
         <div><b>Cost gloanțe:</b> ${Math.round(out.costAmmo).toLocaleString()}$</div>
         <div><b>Cost materiale:</b> ${Math.round(out.costMats).toLocaleString()}$</div>
+        <hr>
+        <button class="btn secondary" id="copyDiscordBtn" type="button">Copiază (Discord)</button>
       </div>
     </div>
 
@@ -1082,9 +1081,26 @@ function renderResult(out, isPreview){
     </div>
   `;
 
+  // zoom imagine rezultat
   const resImg = document.getElementById("resultWeaponImg");
   if(resImg){
     resImg.addEventListener("click", ()=> openLightbox(out.w.name, imageForWeapon(out.w.name)));
+  }
+
+  // copy discord
+  const copyBtn = document.getElementById("copyDiscordBtn");
+  if(copyBtn){
+    copyBtn.addEventListener("click", ()=>{
+      const lines = [];
+      lines.push(`**${out.w.name}** x${out.qty} • **${out.bullets} gl**`);
+      lines.push(`Total: **${out.total.toLocaleString()}$**`);
+      lines.push(`—`);
+      materialOrder.forEach(k=>{
+        const v = Math.round(out.grandTotals[k]||0);
+        if(v>0) lines.push(`• ${materialLabels[k]}: **${v}**`);
+      });
+      navigator.clipboard?.writeText(lines.join("\n"));
+    });
   }
 }
 
@@ -1177,7 +1193,6 @@ function handleWeaponChange(){
   fillBullets();
   show(bulletsStep);
 
-  // default 100 + trigger
   bulletsSelect.value="100";
   setTimeout(()=> bulletsSelect.dispatchEvent(new Event("change")), 0);
 }
@@ -1419,7 +1434,9 @@ window.addEventListener("keydown",(e)=>{
 });
 
 /* =========================
-   Weapon grid rendering (✅ select button)
+   Weapon grid rendering
+   ✅ BUTON SELECTEAZĂ
+   ✅ Filtru OFICIALA corect
 ========================= */
 function selectWeaponByIndex(idx){
   weaponSelect.value = String(idx);
@@ -1435,9 +1452,13 @@ function renderWeaponGrid(){
   weapons.forEach((w, idx)=>{
     const cat = categoryOf(w.name);
 
+    // ✅ filtre:
     if(modalCategory !== "ALL"){
-      if(modalCategory === "OFICIALA" && w.type !== "money") return;
-      if(modalCategory !== "OFICIALA" && modalCategory !== cat) return;
+      if(modalCategory === "OFICIALA"){
+        if(w.type !== "money") return;
+      }else{
+        if(modalCategory !== cat) return;
+      }
     }
 
     const hay = (w.name + " " + cat + " " + (w.type==="money" ? "oficiala" : "craft")).toLowerCase();
@@ -1475,7 +1496,7 @@ function renderWeaponGrid(){
       selectWeaponByIndex(idx);
     });
 
-    // hover tooltip (pe card)
+    // hover tooltip
     card.addEventListener("mouseenter", (ev)=>{
       tooltipForWeapon(w);
       showTooltipAt(ev.clientX, ev.clientY);
