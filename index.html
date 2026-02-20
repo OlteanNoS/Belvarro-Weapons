@@ -16,8 +16,8 @@
 
 <style>
   :root{
-    /* ✅ Shop background (link-ul tău) */
-    --bg-url: url("https://i.imgur.com/fTp0NnE.png");
+    /* background (poți schimba oricând) */
+    --bg-url: url("https://images.unsplash.com/photo-1523206489230-c012c64b2b48?auto=format&fit=crop&w=1920&q=80");
     --green:#2ecc71;
     --panel:#141414;
     --panel2:#101010;
@@ -46,39 +46,32 @@
     background-size:cover;
     background-position:center;
     background-repeat:no-repeat;
-    filter: blur(1.8px) brightness(.9) saturate(1.05);
-    transform: scale(1.04);
-    z-index:-3;
+    filter: blur(2px);
+    transform: scale(1.03);
+    z-index:-2;
   }
-  /* subtle grain */
   body::after{
     content:"";
     position:fixed;
     inset:0;
-    background:
-      radial-gradient(circle at 30% 0%, rgba(0,0,0,.25), rgba(0,0,0,.86) 60%, rgba(0,0,0,.93)),
-      repeating-linear-gradient(0deg, rgba(255,255,255,.03), rgba(255,255,255,.03) 1px, rgba(0,0,0,0) 2px, rgba(0,0,0,0) 4px);
-    mix-blend-mode: overlay;
-    opacity:.65;
-    z-index:-2;
-    pointer-events:none;
+    background: radial-gradient(circle at 30% 0%, rgba(0,0,0,.25), rgba(0,0,0,.86) 60%, rgba(0,0,0,.93));
+    z-index:-1;
   }
 
   .container{
     width:1000px;
     max-width:100%;
-    background: rgba(0,0,0,0.84);
-    border:1px solid rgba(255,255,255,0.08);
+    background: rgba(0,0,0,0.85);
+    border:1px solid rgba(255,255,255,0.06);
     border-radius:14px;
     padding:24px;
-    backdrop-filter: blur(7px);
-    box-shadow: 0 22px 90px rgba(0,0,0,.55);
+    backdrop-filter: blur(6px);
   }
 
   h3{margin:10px 0 10px;}
   .box{
-    background: rgba(16,16,16,0.86);
-    border:1px solid rgba(255,255,255,0.07);
+    background: rgba(16,16,16,0.85);
+    border:1px solid rgba(255,255,255,0.06);
     border-radius:14px;
     padding:14px;
   }
@@ -165,8 +158,6 @@
     object-position:center;
     border:1px solid var(--border);
     background:#0f0f0f;
-    image-rendering: -webkit-optimize-contrast;
-    transform: translateZ(0);
   }
   .btn.selectWeapon .title{
     white-space:nowrap;
@@ -187,7 +178,7 @@
     margin-top:0;
   }
   .step.show{
-    max-height:2600px;
+    max-height:2200px;
     opacity:1;
     transform: translateY(0);
     border-left-color:var(--green);
@@ -240,7 +231,6 @@
     object-fit:contain !important;
     object-position:center;
     background:#0f0f0f;
-    image-rendering: -webkit-optimize-contrast;
   }
 
   /* =========================
@@ -281,7 +271,7 @@
     padding:14px;
     border-bottom:1px solid rgba(255,255,255,0.06);
   }
-  .modalHeader .title{font-size:16px;font-weight:900;}
+  .modalHeader .title{font-size:16px;font-weight:900; display:flex; align-items:center; gap:10px;}
   .modalHeader .x{
     cursor:pointer;
     border:1px solid var(--border);
@@ -317,6 +307,61 @@
   }
   .modalBody{padding:14px; overflow:auto;}
 
+  /* =========================
+     CATEGORII PLIABILE
+  ========================= */
+  .catWrap{display:flex; flex-direction:column; gap:12px;}
+  .cat{
+    border:1px solid var(--border);
+    background:#101010;
+    border-radius:16px;
+    overflow:hidden;
+  }
+  .catHead{
+    cursor:pointer;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:12px 12px;
+    background:#111;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    user-select:none;
+  }
+  .catHead:hover{background:#141414;}
+  .catHead .left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    min-width:0;
+  }
+  .catHead .name{
+    font-weight:900;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+  }
+  .catHead .count{
+    font-size:12px;
+    padding:4px 10px;
+    border-radius:999px;
+    border:1px solid var(--border);
+    background:#141414;
+    opacity:.9;
+  }
+  .catHead .arrow{opacity:.7; font-weight:900;}
+  .catBody{
+    max-height:0;
+    opacity:0;
+    overflow:hidden;
+    transition:max-height .25s ease, opacity .2s ease;
+    padding:0 12px;
+  }
+  .cat.open .catBody{
+    max-height:2000px;
+    opacity:1;
+    padding:12px;
+  }
+
   .weaponGrid{
     display:grid;
     grid-template-columns: repeat(4, 1fr);
@@ -348,8 +393,7 @@
     object-fit:contain;
     object-position:center;
     display:block;
-    image-rendering: -webkit-optimize-contrast;
-    transform: translateZ(0);
+    image-rendering: auto;
   }
   .wInfo{padding:10px; display:flex; flex-direction:column; gap:6px;}
   .wName{font-weight:900; font-size:13px; line-height:1.2;}
@@ -390,7 +434,6 @@
     border:1px solid var(--border);
     background:#0b0b0b;
     object-fit:cover;
-    image-rendering: -webkit-optimize-contrast;
   }
   .matName{
     font-weight:900;
@@ -421,9 +464,7 @@
     box-shadow: 0 0 0 2px rgba(231,76,60,.12) inset;
   }
 
-  /* =========================
-     Tooltip + Lightbox
-  ========================= */
+  /* Tooltip + Lightbox */
   .tooltip{
     position:fixed;
     z-index:1200;
@@ -491,95 +532,15 @@
     background:#0f0f0f;
     border-radius:14px;
     border:1px solid var(--border);
-    image-rendering: -webkit-optimize-contrast;
   }
 
-  /* =========================
-     NEXT LEVEL: Receipt + Top missing
-  ========================= */
-  .receipt{
-    border:1px solid rgba(255,255,255,0.08);
-    background: linear-gradient(180deg, rgba(20,20,20,.9), rgba(14,14,14,.86));
-    border-radius:16px;
-    padding:12px;
-    display:flex;
-    gap:12px;
-    align-items:center;
-  }
-  .receipt img{
-    width:62px;height:62px;
-    border-radius:14px;
-    border:1px solid var(--border);
-    background:#0f0f0f;
-    object-fit:contain;
-    image-rendering: -webkit-optimize-contrast;
-  }
-  .receipt .rMain{min-width:0; flex:1;}
-  .receipt .rTitle{
-    font-weight:900;
-    font-size:15px;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-  .receipt .rSub{opacity:.78; font-size:12px; margin-top:4px;}
-  .receipt .rTotal{
-    text-align:right;
-    min-width:140px;
-  }
-  .receipt .rTotal .big{
-    font-weight:900;
-    font-size:20px;
-  }
-  .receipt .rTotal .small{
-    opacity:.78;
-    font-size:12px;
-    margin-top:2px;
-  }
-
-  .topMissing{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
-  .topMissingRow{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    border:1px solid var(--border);
-    background:#101010;
-    border-radius:14px;
-    padding:10px;
-  }
-  .topMissingRow .left{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    min-width:0;
-  }
-  .topMissingRow img{
-    width:34px;height:34px;
+  /* shop icon in modal title */
+  .shopIcon{
+    width:28px;height:28px;
     border-radius:10px;
-    border:1px solid var(--border);
-    background:#0b0b0b;
+    border:1px solid rgba(255,255,255,.12);
+    background:#0f0f0f;
     object-fit:cover;
-    image-rendering: -webkit-optimize-contrast;
-  }
-  .topMissingRow .name{
-    font-weight:900;
-    white-space:nowrap;
-    overflow:hidden;
-    text-overflow:ellipsis;
-  }
-  .topMissingRow .qty{
-    font-weight:900;
-    padding:6px 10px;
-    border-radius:999px;
-    background:#141414;
-    border:1px solid var(--border);
-    min-width:54px;
-    text-align:center;
   }
 </style>
 </head>
@@ -632,11 +593,6 @@
           <input type="checkbox" id="noAttach" />
           Nu vreau atașamente
         </label>
-      </div>
-
-      <!-- ✅ Am scos Full Kit (subiectiv). Păstrez doar “No attachments” ca utilitar. -->
-      <div class="row" style="margin-top:10px;">
-        <button class="btn secondary" id="noKitBtn" type="button">No attachments</button>
       </div>
 
       <div class="attachments" id="attachmentsList"></div>
@@ -711,23 +667,24 @@
 <div class="modalOverlay" id="weaponModal">
   <div class="modal" role="dialog" aria-modal="true" aria-label="Alege arma">
     <div class="modalHeader">
-      <div class="title">Alege arma</div>
+      <div class="title">
+        <img class="shopIcon" src="https://i.imgur.com/fTp0NnE.png" alt="Shop">
+        Alege arma
+      </div>
       <button class="x" id="closeWeaponModalBtn" type="button">✕</button>
     </div>
 
     <div class="modalControls">
       <input id="modalSearch" type="text" placeholder="Caută armă..." style="flex:1; min-width:240px;"/>
       <div class="row">
-        <div class="pill active" data-cat="ALL">Toate</div>
-        <div class="pill" data-cat="Pistoale">Pistoale</div>
-        <div class="pill" data-cat="SMG">SMG</div>
-        <div class="pill" data-cat="Rifle">Rifle</div>
-        <div class="pill" data-cat="OFICIALA">OFICIALA</div>
+        <div class="pill active" data-type="ALL">Toate</div>
+        <div class="pill" data-type="craft">Craft</div>
+        <div class="pill" data-type="money">OFICIALA</div>
       </div>
     </div>
 
     <div class="modalBody">
-      <div class="weaponGrid" id="weaponGrid"></div>
+      <div class="catWrap" id="catWrap"></div>
       <div class="muted" id="weaponGridEmpty" style="display:none; padding:10px;">Niciun rezultat.</div>
     </div>
   </div>
@@ -940,6 +897,7 @@ function categoryOf(name){
   if(rifles.has(name)) return "Rifle";
   return "Rifle";
 }
+const categoryOrder = ["Pistoale","SMG","Rifle","OFICIALA"];
 
 /* =========================
    IMAGINI ARME
@@ -993,8 +951,6 @@ const qtyStep = document.getElementById("qtyStep");
 const ammoHint = document.getElementById("ammoHint");
 const attachmentsHint = document.getElementById("attachmentsHint");
 
-const noKitBtn = document.getElementById("noKitBtn");
-
 const qtyInput = document.getElementById("qty");
 const calcBtn = document.getElementById("calcBtn");
 const addToCartBtn = document.getElementById("addToCartBtn");
@@ -1006,11 +962,11 @@ const calcCartBtn = document.getElementById("calcCartBtn");
 const clearCartBtn = document.getElementById("clearCartBtn");
 
 const weaponModal = document.getElementById("weaponModal");
-const weaponGrid = document.getElementById("weaponGrid");
+const catWrap = document.getElementById("catWrap");
 const weaponGridEmpty = document.getElementById("weaponGridEmpty");
 const modalSearch = document.getElementById("modalSearch");
 const closeWeaponModalBtn = document.getElementById("closeWeaponModalBtn");
-const pills = [...document.querySelectorAll(".pill[data-cat]")];
+const typePills = [...document.querySelectorAll(".pill[data-type]")];
 
 // Tooltip + Lightbox
 const tooltip = document.getElementById("tooltip");
@@ -1090,24 +1046,9 @@ function estimateMaterialsCost(t){
 }
 
 /* =========================
-   compute + cache (perf)
+   compute
 ========================= */
-const computeCache = new Map(); // key -> out
-function cacheKey(sel){
-  return JSON.stringify({
-    w: sel.weaponIndex,
-    q: sel.qty,
-    b: sel.bullets,
-    n: sel.noAttach ? 1 : 0,
-    a: (sel.selectedAtt||[]).slice().sort((x,y)=>x-y)
-  });
-}
-
 function computeOneSelection(sel){
-  const key = cacheKey(sel);
-  const cached = computeCache.get(key);
-  if(cached) return cached;
-
   const w=weapons[sel.weaponIndex];
   const qty=Math.max(1, sel.qty||1);
   const bullets=sel.bullets||100;
@@ -1145,9 +1086,7 @@ function computeOneSelection(sel){
   const costMats=estimateMaterialsCost(grandTotals);
   const total=Math.round(costWeapon + costAmmo + costMats);
 
-  const out = {w, qty, bullets, baseTotals, attTotals, ammoTotals, grandTotals, costWeapon, costAmmo, costMats, total};
-  computeCache.set(key, out);
-  return out;
+  return {w, qty, bullets, baseTotals, attTotals, ammoTotals, grandTotals, costWeapon, costAmmo, costMats, total};
 }
 
 function currentSelectionToObject(){
@@ -1165,7 +1104,7 @@ function currentSelectionToObject(){
 }
 
 /* =========================
-   Material cards + Stock Mode
+   Material card + Stock Mode
 ========================= */
 function matCardHTML(key, value, extraClass=""){
   const v = Math.round(value || 0);
@@ -1246,34 +1185,8 @@ function renderMissingGrid(miss, have, need){
   `;
 }
 
-function topMissingList(miss){
-  const items = materialOrder
-    .map(k=>({k, v: Math.round(miss[k]||0)}))
-    .filter(x=>x.v>0)
-    .sort((a,b)=>b.v-a.v)
-    .slice(0,3);
-
-  if(items.length===0){
-    return `<div class="muted">Nimic — ai tot stocul necesar ✅</div>`;
-  }
-
-  return `
-    <div class="topMissing">
-      ${items.map(x=>`
-        <div class="topMissingRow">
-          <div class="left">
-            <img src="${materialIcons[x.k]||""}" alt="${materialLabels[x.k]||x.k}">
-            <div class="name">${materialLabels[x.k]||x.k}</div>
-          </div>
-          <div class="qty">${x.v}</div>
-        </div>
-      `).join("")}
-    </div>
-  `;
-}
-
 /* =========================
-   RENDER result (Receipt + Top missing)
+   RENDER result
 ========================= */
 function renderResult(out, isPreview){
   resultDiv.style.display="block";
@@ -1285,22 +1198,34 @@ function renderResult(out, isPreview){
   const costNeed = Math.round(estimateMaterialsCost(need));
   const costMiss = Math.round(estimateMaterialsCost(miss));
 
-  const typeLabel = (out.w.type==="money") ? "OFICIALA" : "CRAFT";
-  const ammoOne = ammoExactInterpolated(out.w.name, out.bullets);
-
   resultDiv.innerHTML=`
     <h3>${isPreview ? "Preview" : "Rezultat"}</h3>
 
-    <div class="receipt">
-      <img src="${imageForWeapon(out.w.name)}" alt="${out.w.name}" id="receiptImg" style="cursor:zoom-in;">
-      <div class="rMain">
-        <div class="rTitle">${out.w.name}</div>
-        <div class="rSub">${categoryOf(out.w.name)} • ${typeLabel} • ${out.qty} arme • ${out.bullets} gl</div>
-        <div class="rSub">Praf: <b>${Math.round(ammoOne.powder*out.qty)}</b> • Cost gloanțe: <b>${Math.round(out.costAmmo).toLocaleString()}$</b></div>
+    <div class="grid">
+      <div class="box">
+        <div class="row" style="align-items:center; gap:12px;">
+          <img src="${imageForWeapon(out.w.name)}" alt="${out.w.name}"
+               style="width:72px;height:72px;border-radius:14px;object-fit:contain;border:1px solid var(--border);background:#0f0f0f;cursor:zoom-in;"
+               id="resultWeaponImg">
+          <div style="min-width:0;">
+            <div style="font-size:16px;font-weight:900;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+              ${out.w.name}
+            </div>
+            <div class="muted">${categoryOf(out.w.name)} • ${out.w.type==="craft" ? "Craft" : "OFICIALA"}</div>
+            <div style="opacity:.9;margin-top:6px;">
+              <b>Arme:</b> ${out.qty} • <b>Gloanțe:</b> ${out.bullets}
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="rTotal">
-        <div class="big">${out.total.toLocaleString()}$</div>
-        <div class="small">arme ${Math.round(out.costWeapon).toLocaleString()}$ • materiale ${Math.round(out.costMats).toLocaleString()}$</div>
+
+      <div class="box">
+        <div class="muted">Total</div>
+        <div style="font-size:22px;font-weight:900;">${out.total.toLocaleString()}$</div>
+        <hr>
+        <div><b>Cost armă:</b> ${Math.round(out.costWeapon).toLocaleString()}$</div>
+        <div><b>Cost gloanțe:</b> ${Math.round(out.costAmmo).toLocaleString()}$</div>
+        <div><b>Cost materiale:</b> ${Math.round(out.costMats).toLocaleString()}$</div>
       </div>
     </div>
 
@@ -1329,15 +1254,6 @@ function renderResult(out, isPreview){
 
         <hr>
 
-        <div class="grid" style="grid-template-columns:1fr; gap:10px;">
-          <div class="box" style="padding:12px;">
-            <div class="muted" style="margin-bottom:10px;">Top lipsuri</div>
-            <div id="topMissingWrap">${topMissingList(miss)}</div>
-          </div>
-        </div>
-
-        <hr>
-
         <h3 style="margin-top:0;">Îți lipsesc</h3>
         <div id="missingGridWrap">
           ${renderMissingGrid(miss, stockSaved, need)}
@@ -1356,25 +1272,9 @@ function renderResult(out, isPreview){
         <h3 style="margin-top:0;">Separat</h3>
         <div class="muted">Armă / Atașamente / Gloanțe</div>
         <hr>
-        <div><b>Armă:</b>
-          Oțel ${Math.round(out.baseTotals.steel||0)},
-          Șuruburi ${Math.round(out.baseTotals.screw||0)},
-          Țeavă ${Math.round(out.baseTotals.barrel||0)},
-          Arc ${Math.round(out.baseTotals.spring||0)},
-          Lemn ${Math.round(out.baseTotals.wood||0)},
-          Polimer ${Math.round(out.baseTotals.polymer||0)}
-        </div>
+        <div><b>Armă:</b> Oțel ${Math.round(out.baseTotals.steel||0)}, Șuruburi ${Math.round(out.baseTotals.screw||0)}, Țeavă ${Math.round(out.baseTotals.barrel||0)}, Arc ${Math.round(out.baseTotals.spring||0)}, Lemn ${Math.round(out.baseTotals.wood||0)}, Polimer ${Math.round(out.baseTotals.polymer||0)}</div>
         <hr>
-        <div><b>Atașamente:</b>
-          Oțel ${Math.round(out.attTotals.steel||0)},
-          Șuruburi ${Math.round(out.attTotals.screw||0)},
-          Țeavă ${Math.round(out.attTotals.barrel||0)},
-          Arc ${Math.round(out.attTotals.spring||0)},
-          Lemn ${Math.round(out.attTotals.wood||0)},
-          Polimer ${Math.round(out.attTotals.polymer||0)},
-          Bec ${Math.round(out.attTotals.bec||0)},
-          Lupă ${Math.round(out.attTotals.lupa||0)}
-        </div>
+        <div><b>Atașamente:</b> Oțel ${Math.round(out.attTotals.steel||0)}, Șuruburi ${Math.round(out.attTotals.screw||0)}, Țeavă ${Math.round(out.attTotals.barrel||0)}, Arc ${Math.round(out.attTotals.spring||0)}, Lemn ${Math.round(out.attTotals.wood||0)}, Polimer ${Math.round(out.attTotals.polymer||0)}, Bec ${Math.round(out.attTotals.bec||0)}, Lupă ${Math.round(out.attTotals.lupa||0)}</div>
         <hr>
         <div><b>Gloanțe:</b> Praf ${Math.round(out.ammoTotals.powder||0)}</div>
       </div>
@@ -1392,36 +1292,28 @@ function renderResult(out, isPreview){
     </div>
   `;
 
-  // zoom
-  const rImg = document.getElementById("receiptImg");
-  if(rImg){
-    rImg.addEventListener("click", ()=> openLightbox(out.w.name, imageForWeapon(out.w.name)));
+  // zoom din rezultat
+  const resImg = document.getElementById("resultWeaponImg");
+  if(resImg){
+    resImg.addEventListener("click", ()=> openLightbox(out.w.name, imageForWeapon(out.w.name)));
   }
 
-  // stock live recalculation + persist (debounce)
+  // stock live recalculation + persist
   const stockWrap = document.getElementById("stockInputsWrap");
   const missWrap = document.getElementById("missingGridWrap");
   const missCostEl = document.getElementById("missingCost");
-  const topWrap = document.getElementById("topMissingWrap");
-
-  let stockTimer = null;
-  function recalcStock(){
-    const currentStock = readStockFromUI(stockWrap);
-    saveStock(currentStock);
-
-    const missNow = computeMissing(need, currentStock);
-    missWrap.innerHTML = renderMissingGrid(missNow, currentStock, need);
-    topWrap.innerHTML = topMissingList(missNow);
-
-    const costMissNow = Math.round(estimateMaterialsCost(missNow));
-    missCostEl.textContent = costMissNow.toLocaleString() + "$";
-  }
 
   stockWrap.querySelectorAll("input[data-stock-key]").forEach(inp=>{
     inp.addEventListener("input", ()=>{
       if(parseInt(inp.value||"0",10)<0) inp.value="0";
-      if(stockTimer) clearTimeout(stockTimer);
-      stockTimer = setTimeout(recalcStock, 160);
+      const currentStock = readStockFromUI(stockWrap);
+      saveStock(currentStock);
+
+      const missNow = computeMissing(need, currentStock);
+      missWrap.innerHTML = renderMissingGrid(missNow, currentStock, need);
+
+      const costMissNow = Math.round(estimateMaterialsCost(missNow));
+      missCostEl.textContent = costMissNow.toLocaleString() + "$";
     });
   });
 
@@ -1507,12 +1399,6 @@ function syncNoAttachUI(){
   }
   updateLivePreview();
 }
-function noKit(){
-  noAttach.checked=true;
-  syncNoAttachUI();
-  updateLivePreview();
-}
-noKitBtn.addEventListener("click", noKit);
 noAttach.addEventListener("change", syncNoAttachUI);
 attachmentsList.addEventListener("change", (e)=>{
   if(e.target && e.target.classList.contains("attCheck")) updateLivePreview();
@@ -1555,7 +1441,7 @@ function handleWeaponChange(){
   fillBullets();
   show(bulletsStep);
 
-  // default 100 + trigger (ca să poți calcula fără să schimbi manual)
+  // default 100 + trigger
   bulletsSelect.value="100";
   setTimeout(()=> bulletsSelect.dispatchEvent(new Event("change")), 0);
 }
@@ -1585,9 +1471,9 @@ selectedWeaponImg.addEventListener("click", ()=>{
 });
 
 /* =========================
-   CART (upgrade: edit + reorder)
+   CART
 ========================= */
-const CART_KEY="fivem_cart_v4";
+const CART_KEY="fivem_cart_v3";
 let cart=[];
 function saveCart(){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
 function loadCart(){
@@ -1607,7 +1493,7 @@ function renderCart(){
   cart.forEach((it,idx)=>{
     const w=weapons[it.weaponIndex];
     const chips=[];
-    chips.push(`<span class="mini">${w.type==="money" ? "OFICIALA" : "CRAFT"}</span>`);
+    chips.push(`<span class="mini">${w.type==="craft"?"Craft":"OFICIALA"}</span>`);
     chips.push(`<span class="mini">${it.qty} arme</span>`);
     chips.push(`<span class="mini">${it.bullets} gl</span>`);
     chips.push(`<span class="mini">${it.noAttach ? "fără ataș." : (it.selectedAtt?.length||0)+" ataș."}</span>`);
@@ -1622,15 +1508,13 @@ function renderCart(){
                data-zoom-name="${w.name}">
           <div>
             <b>${w.name}</b>
-            <div class="muted">${categoryOf(w.name)} • ${w.type==="money" ? "OFICIALA" : "CRAFT"}</div>
+            <div class="muted">${categoryOf(w.name)} • ${w.type==="craft"?"Craft":"OFICIALA"}</div>
           </div>
         </div>
         <div class="cartMeta">${chips.join("")}</div>
       </div>
       <div class="row" style="margin-top:10px;">
-        <button class="btn secondary" data-act="edit" data-idx="${idx}" type="button">Editează</button>
-        <button class="btn secondary" data-act="up" data-idx="${idx}" type="button">↑</button>
-        <button class="btn secondary" data-act="down" data-idx="${idx}" type="button">↓</button>
+        <button class="btn secondary" data-act="dup" data-idx="${idx}" type="button">Duplică</button>
         <button class="btn danger" data-act="del" data-idx="${idx}" type="button">Șterge</button>
       </div>
     `;
@@ -1651,52 +1535,13 @@ function renderCart(){
       if(act==="del"){
         cart.splice(idx,1);
         saveCart(); renderCart();
-      }else if(act==="up"){
-        if(idx<=0) return;
-        const tmp=cart[idx-1];
-        cart[idx-1]=cart[idx];
-        cart[idx]=tmp;
+      }else if(act==="dup"){
+        cart.splice(idx+1,0, JSON.parse(JSON.stringify(cart[idx])));
         saveCart(); renderCart();
-      }else if(act==="down"){
-        if(idx>=cart.length-1) return;
-        const tmp=cart[idx+1];
-        cart[idx+1]=cart[idx];
-        cart[idx]=tmp;
-        saveCart(); renderCart();
-      }else if(act==="edit"){
-        loadSelectionToUI(cart[idx]);
-        window.scrollTo({top:0, behavior:"smooth"});
       }
     });
   });
 }
-
-function loadSelectionToUI(sel){
-  weaponSelect.value = String(sel.weaponIndex);
-  weaponSelect.dispatchEvent(new Event("change"));
-
-  // wait for bullets + attachments render
-  setTimeout(()=>{
-    bulletsSelect.value = String(sel.bullets||100);
-    bulletsSelect.dispatchEvent(new Event("change"));
-
-    setTimeout(()=>{
-      qtyInput.value = String(sel.qty||1);
-      noAttach.checked = !!sel.noAttach;
-      syncNoAttachUI();
-
-      // set attachments
-      if(!noAttach.checked){
-        const set = new Set(sel.selectedAtt||[]);
-        attachmentsList.querySelectorAll(".attCheck").forEach(cb=>{
-          cb.checked = set.has(Number(cb.value));
-        });
-      }
-      updateLivePreview();
-    }, 30);
-  }, 30);
-}
-
 addToCartBtn.addEventListener("click", ()=>{
   const sel=currentSelectionToObject();
   if(!sel){ alert("Selectează o armă!"); return; }
@@ -1727,18 +1572,6 @@ calcCartBtn.addEventListener("click", ()=>{
   cartResult.style.display="block";
   cartResult.innerHTML=`
     <h3>Total Coș</h3>
-    <div class="receipt" style="margin-bottom:12px;">
-      <img src="https://i.imgur.com/fTp0NnE.png" alt="Shop" style="object-fit:cover;">
-      <div class="rMain">
-        <div class="rTitle">Coș (cumulat)</div>
-        <div class="rSub">${cart.length} item-uri • total materiale + gloanțe + arme</div>
-      </div>
-      <div class="rTotal">
-        <div class="big">${Math.round(sumAll).toLocaleString()}$</div>
-        <div class="small">arme ${Math.round(sumWeapon).toLocaleString()}$ • gl ${Math.round(sumAmmo).toLocaleString()}$</div>
-      </div>
-    </div>
-
     <div class="grid">
       <div class="box">
         <div class="muted">Total</div>
@@ -1760,16 +1593,16 @@ calcCartBtn.addEventListener("click", ()=>{
 });
 
 /* =========================
-   MODAL + SEARCH
+   MODAL + SEARCH + CATEGORII
 ========================= */
-let modalCategory = "ALL";
+let modalType = "ALL"; // ALL | craft | money
 
 function openModal(){
   weaponModal.classList.add("show");
   modalSearch.value = "";
-  modalCategory = "ALL";
-  pills.forEach(p=>p.classList.toggle("active", p.dataset.cat==="ALL"));
-  renderWeaponGrid();
+  modalType = "ALL";
+  typePills.forEach(p=>p.classList.toggle("active", p.dataset.type==="ALL"));
+  renderCategoryModal();
   setTimeout(()=> modalSearch.focus(), 20);
 }
 function closeModal(){
@@ -1786,14 +1619,14 @@ window.addEventListener("keydown", (e)=>{
   if(e.key === "Escape" && weaponModal.classList.contains("show")) closeModal();
 });
 
-pills.forEach(p=>{
+typePills.forEach(p=>{
   p.addEventListener("click", ()=>{
-    modalCategory = p.dataset.cat;
-    pills.forEach(x=>x.classList.toggle("active", x===p));
-    renderWeaponGrid();
+    modalType = p.dataset.type; // ALL/craft/money
+    typePills.forEach(x=>x.classList.toggle("active", x===p));
+    renderCategoryModal();
   });
 });
-modalSearch.addEventListener("input", renderWeaponGrid);
+modalSearch.addEventListener("input", renderCategoryModal);
 
 /* =========================
    Tooltip + Lightbox
@@ -1812,14 +1645,13 @@ function showTooltipAt(x,y){
 }
 function hideTooltip(){ tooltip.classList.remove("show"); }
 
-function tooltipForWeapon(w, idx){
-  // preview standard: 1 armă, 100 gl, fără atașamente
-  const sel = {weaponIndex: idx, qty:1, bullets:100, noAttach:true, selectedAtt:[]};
+function tooltipForWeapon(w){
+  const sel = {weaponIndex: weapons.findIndex(x=>x.name===w.name), qty:1, bullets:100, noAttach:true, selectedAtt:[]};
   const out = computeOneSelection(sel);
   const am = ammoExactInterpolated(w.name, 100);
 
   tipTitle.textContent = w.name;
-  tipType.textContent = (w.type==="money" ? "OFICIALA" : "CRAFT");
+  tipType.textContent = (w.type==="craft" ? "Craft" : "OFICIALA");
   tipCost.textContent = out.total.toLocaleString() + "$";
   tipPowder.textContent = Math.round(am.powder);
 
@@ -1851,80 +1683,127 @@ window.addEventListener("keydown",(e)=>{
 });
 
 /* =========================
-   Weapon grid rendering
+   Category modal render
 ========================= */
-function renderWeaponGrid(){
+function weaponMatchesFilters(w, q){
+  if(modalType !== "ALL" && w.type !== modalType) return false;
+
+  if(!q) return true;
+  const cat = (w.type==="money" ? "OFICIALA" : categoryOf(w.name));
+  const hay = (w.name + " " + cat + " " + (w.type==="money"?"oficiala":"craft")).toLowerCase();
+  return hay.includes(q);
+}
+
+function renderWeaponCard(w, idx){
+  const card=document.createElement("div");
+  card.className="wCard";
+  const img=imageForWeapon(w.name);
+
+  card.innerHTML=`
+    <img class="wImg" src="${img}" alt="${w.name}" data-zoom="1">
+    <div class="wInfo">
+      <div class="wName">${w.name}</div>
+      <div class="wMetaRow">
+        <span class="tag">${w.type==="money" ? "OFICIALA" : categoryOf(w.name)}</span>
+        <span class="tag">${w.type==="craft" ? "Craft" : "OFICIALA"}</span>
+      </div>
+    </div>
+  `;
+
+  card.addEventListener("click", (e)=>{
+    const imgEl = e.target?.closest?.("img[data-zoom]");
+    if(imgEl){
+      e.stopPropagation();
+      openLightbox(w.name, img);
+      return;
+    }
+    weaponSelect.value = String(idx);
+    weaponSelect.dispatchEvent(new Event("change"));
+    closeModal();
+  });
+
+  card.addEventListener("mouseenter", (ev)=>{
+    tooltipForWeapon(w);
+    showTooltipAt(ev.clientX, ev.clientY);
+  });
+  card.addEventListener("mousemove", (ev)=>{
+    if(tooltip.classList.contains("show")) showTooltipAt(ev.clientX, ev.clientY);
+  });
+  card.addEventListener("mouseleave", ()=>{
+    hideTooltip();
+  });
+
+  return card;
+}
+
+function renderCategoryModal(){
   const q = (modalSearch.value||"").trim().toLowerCase();
-  weaponGrid.innerHTML = "";
-  let count = 0;
+  catWrap.innerHTML = "";
+  weaponGridEmpty.style.display = "none";
+
+  // grupare în categorii
+  const groups = {
+    "Pistoale": [],
+    "SMG": [],
+    "Rifle": [],
+    "OFICIALA": []
+  };
 
   weapons.forEach((w, idx)=>{
-    const cat = categoryOf(w.name);
-    const typeLabel = (w.type==="money") ? "OFICIALA" : "CRAFT";
+    if(!weaponMatchesFilters(w, q)) return;
+    const cat = (w.type==="money") ? "OFICIALA" : categoryOf(w.name);
+    if(!groups[cat]) groups[cat]=[];
+    groups[cat].push({w, idx});
+  });
 
-    if(modalCategory !== "ALL"){
-      if(modalCategory === "OFICIALA"){
-        if(w.type !== "money") return;
-      }else{
-        if(modalCategory !== cat) return;
-      }
-    }
+  const totalCount = Object.values(groups).reduce((a,arr)=>a+arr.length,0);
+  if(totalCount===0){
+    weaponGridEmpty.style.display="block";
+    return;
+  }
 
-    const hay = (w.name + " " + cat + " " + typeLabel).toLowerCase();
-    if(q && !hay.includes(q)) return;
+  categoryOrder.forEach(catName=>{
+    const items = groups[catName] || [];
+    if(items.length===0) return;
 
-    count++;
+    const cat=document.createElement("div");
+    cat.className="cat open"; // default open (poți schimba în close dacă vrei)
+    cat.dataset.cat = catName;
 
-    const card=document.createElement("div");
-    card.className="wCard";
-    const img=imageForWeapon(w.name);
-
-    card.innerHTML=`
-      <img class="wImg" src="${img}" alt="${w.name}" data-zoom="1">
-      <div class="wInfo">
-        <div class="wName">${w.name}</div>
-        <div class="wMetaRow">
-          <span class="tag">${cat}</span>
-          <span class="tag">${typeLabel}</span>
+    cat.innerHTML=`
+      <div class="catHead">
+        <div class="left">
+          <div class="name">${catName}</div>
+          <div class="count">${items.length}</div>
         </div>
+        <div class="arrow">▾</div>
+      </div>
+      <div class="catBody">
+        <div class="weaponGrid"></div>
       </div>
     `;
 
-    // click pe card = select
-    card.addEventListener("click", (e)=>{
-      const imgEl = e.target?.closest?.("img[data-zoom]");
-      if(imgEl){
-        e.stopPropagation();
-        openLightbox(w.name, img);
-        return;
-      }
-      weaponSelect.value = String(idx);
-      weaponSelect.dispatchEvent(new Event("change"));
-      closeModal();
+    const head = cat.querySelector(".catHead");
+    const body = cat.querySelector(".catBody");
+    const arrow = cat.querySelector(".arrow");
+    head.addEventListener("click", ()=>{
+      cat.classList.toggle("open");
+      arrow.textContent = cat.classList.contains("open") ? "▾" : "▸";
     });
 
-    // hover preview tooltip
-    card.addEventListener("mouseenter", (ev)=>{
-      tooltipForWeapon(w, idx);
-      showTooltipAt(ev.clientX, ev.clientY);
-    });
-    card.addEventListener("mousemove", (ev)=>{
-      if(tooltip.classList.contains("show")) showTooltipAt(ev.clientX, ev.clientY);
-    });
-    card.addEventListener("mouseleave", ()=>{
-      hideTooltip();
+    const grid = cat.querySelector(".weaponGrid");
+    items.forEach(({w, idx})=>{
+      grid.appendChild(renderWeaponCard(w, idx));
     });
 
-    weaponGrid.appendChild(card);
+    catWrap.appendChild(cat);
   });
-
-  weaponGridEmpty.style.display = count===0 ? "block" : "none";
 }
 
 /* =========================
    STOCK persist
 ========================= */
-const STOCK_KEY="fivem_stock_v2";
+const STOCK_KEY="fivem_stock_v1";
 function saveStock(stock){ localStorage.setItem(STOCK_KEY, JSON.stringify(stock)); }
 function loadStock(){
   try{
