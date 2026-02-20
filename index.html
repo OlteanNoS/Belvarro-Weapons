@@ -32,6 +32,10 @@
     }
   *{box-sizing:border-box}
   body{
+    background-image: url("https://i.imgur.com/hdGnzUT.jpeg");
+    background-size:cover;
+    background-position:center;
+    background-repeat:no-repeat;
     margin:0;
     font-family: Arial, sans-serif;
     color:var(--text);
@@ -39,7 +43,6 @@
     display:flex;
     justify-content:center;
     padding:20px;
-    background:#0d0d0d;
     position:relative;
     overflow-x:hidden;
   }
@@ -47,10 +50,6 @@
     content:"";
     position:fixed;
     inset:0;
-    background-image: var(--bg-url);
-    background-size:cover;
-    background-position:center;
-    background-repeat:no-repeat;
     filter: blur(2px) saturate(1.1);
     transform: scale(1.04);
     z-index:-2;
@@ -2208,3 +2207,4 @@ init();
 
 </body>
 </html>
+
