@@ -16,6 +16,7 @@
     --border:#2a2a2a;
     --text:#ffffff;
     --muted: rgba(255,255,255,.75);
+    --shadow: 0 18px 70px rgba(0,0,0,.55);
   }
 
   body{
@@ -58,6 +59,7 @@
     border-radius:14px;
     padding:24px;
     backdrop-filter: blur(6px);
+    box-shadow: var(--shadow);
   }
 
   h3{margin:10px 0 10px;}
@@ -122,6 +124,12 @@
   .btn.secondary:hover{background:#1b1b1b;}
   .btn.danger{background:#c0392b;}
   .btn.danger:hover{background:#a93226;}
+  .btn.ghost{
+    background:transparent;
+    border:1px solid rgba(255,255,255,.12);
+    font-weight:800;
+  }
+  .btn.ghost:hover{border-color:rgba(255,255,255,.22); background:rgba(255,255,255,.04);}
 
   .btn.selectWeapon{
     width:100%;
@@ -149,6 +157,8 @@
     object-position:center;
     border:1px solid var(--border);
     background:#0f0f0f;
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
   }
   .btn.selectWeapon .title{
     white-space:nowrap;
@@ -169,7 +179,7 @@
     margin-top:0;
   }
   .step.show{
-    max-height:2200px;
+    max-height:2600px;
     opacity:1;
     transform: translateY(0);
     border-left-color:var(--green);
@@ -179,7 +189,7 @@
 
   .attachments{margin-top:10px;}
   .attach{margin:8px 0;}
-  .attach label{cursor:pointer;}
+  .attach label{cursor:pointer; display:flex; align-items:center; gap:10px;}
   .attach input{transform: translateY(1px); accent-color:var(--green);}
 
   /* Attachment Builder */
@@ -232,8 +242,20 @@
     background:#121212;
     font-weight:900;
   }
-  .attGroupBody{padding:10px 12px;}
   .attCountSmall{opacity:.75; font-size:12px; font-weight:800;}
+  .attGroupBody{padding:10px 12px;}
+  .attIcon{
+    width:28px;height:28px;
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:10px;
+    border:1px solid var(--border);
+    background:#101010;
+    flex:0 0 auto;
+    opacity:.95;
+  }
+  .attIcon i{font-size:14px; opacity:.9;}
 
   .result{
     margin-top:14px;
@@ -259,6 +281,64 @@
   hr{border:0; border-top:1px solid var(--border); margin:12px 0;}
   .muted{opacity:.75;}
 
+  /* Detalii armă (upgrade) */
+  .detailsWrap{
+    margin-top:12px;
+    display:none;
+  }
+  .detailsWrap.show{display:block;}
+  .detailsCard{
+    border:1px solid rgba(255,255,255,0.08);
+    background: linear-gradient(180deg, rgba(20,20,20,.86), rgba(10,10,10,.78));
+    border-radius:16px;
+    overflow:hidden;
+    box-shadow: 0 14px 60px rgba(0,0,0,.4);
+  }
+  .detailsTop{
+    display:flex;
+    gap:14px;
+    padding:14px;
+    align-items:center;
+    border-bottom:1px solid rgba(255,255,255,0.06);
+    background: rgba(12,12,12,.55);
+    flex-wrap:wrap;
+  }
+  .detailsTop img{
+    width:92px;height:92px;
+    border-radius:16px;
+    object-fit:contain;
+    border:1px solid var(--border);
+    background:#0f0f0f;
+    cursor:zoom-in;
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
+  }
+  .detailsName{font-weight:900; font-size:18px;}
+  .detailsMeta{opacity:.75; font-weight:800;}
+  .detailsBody{
+    padding:14px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:12px;
+  }
+  @media (max-width: 900px){
+    .detailsBody{grid-template-columns:1fr;}
+  }
+  .statBox{
+    border:1px solid rgba(255,255,255,0.06);
+    background:#0f0f0f;
+    border-radius:14px;
+    padding:12px;
+  }
+  .statRow{display:flex; justify-content:space-between; gap:12px; margin:6px 0; opacity:.92;}
+  .statRow b{font-weight:900;}
+  .tiny{font-size:12px; opacity:.75;}
+  .kpi{
+    font-size:22px;
+    font-weight:900;
+    margin-top:4px;
+  }
+
   /* Cart */
   .cartList{margin-top:10px; display:flex; flex-direction:column; gap:10px;}
   .cartItem{
@@ -275,6 +355,8 @@
     object-fit:contain !important;
     object-position:center;
     background:#0f0f0f;
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
   }
 
   /* MODAL */
@@ -299,7 +381,7 @@
     backdrop-filter: blur(10px);
     display:flex;
     flex-direction:column;
-    box-shadow: 0 20px 80px rgba(0,0,0,.6);
+    box-shadow: var(--shadow);
     transform: translateY(8px);
     opacity:0;
     animation: pop .18s ease forwards;
@@ -380,6 +462,8 @@
     object-fit:contain;
     object-position:center;
     display:block;
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
   }
   .wInfo{padding:10px; display:flex; flex-direction:column; gap:6px;}
   .wName{font-weight:900; font-size:13px; line-height:1.2;}
@@ -418,6 +502,8 @@
     border:1px solid var(--border);
     background:#0b0b0b;
     object-fit:contain;
+    image-rendering: -webkit-optimize-contrast;
+    transform: translateZ(0);
   }
   .matName{
     font-weight:900;
@@ -481,7 +567,7 @@
     border:1px solid rgba(255,255,255,.10);
     background: rgba(12,12,12,.96);
     overflow:hidden;
-    box-shadow: 0 22px 90px rgba(0,0,0,.7);
+    box-shadow: var(--shadow);
   }
   .lbHeader{
     display:flex;
@@ -531,6 +617,7 @@
 
   <div class="box">
     <h3 style="margin-top:0;">Ce vrei să craftezi?</h3>
+
     <div class="field">
       <label>Arma:</label>
 
@@ -546,7 +633,38 @@
         <option value="">-- Selectează arma --</option>
       </select>
     </div>
-    <div class="muted">Apasă pe card ca să alegi din listă cu poze. (Hover = preview, Click pe poză = zoom)</div>
+
+    <!-- ✅ Upgrade: Detalii armă -->
+    <div class="detailsWrap" id="weaponDetailsWrap">
+      <div class="detailsCard">
+        <div class="detailsTop">
+          <img id="detailsImg" alt="">
+          <div style="min-width:0; flex:1;">
+            <div class="detailsName" id="detailsName"></div>
+            <div class="detailsMeta" id="detailsMeta"></div>
+            <div class="tiny" id="detailsTiny"></div>
+          </div>
+          <div class="row">
+            <button class="btn ghost" id="detailsZoomBtn" type="button"><i class="fa-solid fa-magnifying-glass-plus"></i> Zoom</button>
+            <button class="btn ghost" id="detailsScrollBtn" type="button"><i class="fa-solid fa-arrow-down"></i> Continuă</button>
+          </div>
+        </div>
+        <div class="detailsBody">
+          <div class="statBox">
+            <div class="tiny">Preview (1 armă, 100 gl, fără ataș.)</div>
+            <div class="kpi" id="detailsPreviewCost">—</div>
+            <div class="statRow"><span class="muted">Praf (100 gl)</span><b id="detailsPowder100">—</b></div>
+            <div class="statRow"><span class="muted">Cost gloanțe (100)</span><b id="detailsAmmo100">—</b></div>
+          </div>
+          <div class="statBox">
+            <div class="tiny">Bază armă</div>
+            <div id="detailsBaseLines" class="muted" style="line-height:1.55;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="muted" style="margin-top:10px;">Apasă pe card ca să alegi din listă cu poze. (Hover = preview, Click pe poză = zoom)</div>
   </div>
 
   <div class="step" id="bulletsStep">
@@ -828,7 +946,6 @@ const weapons = [
     attachments:[ att("Încărcător",{steel:1,screw:5,spring:1,polymer:1}), att("Amortizor",{steel:2,screw:5,polymer:2}) ] },
   { name:"DB", type:"money", price:250000, attachments:[] },
 
-  /* ✅ Țeavă scoasă din atașamente (nu e atașament) */
   { name:"ASSAULT RIFLE MK2", type:"money", price:70000, attachments:[
       att("Lunetă-Mica",{steel:2,screw:10,polymer:2,lupa:1}),
       att("Lanternă",{steel:1,screw:5,polymer:1,bec:1,lupa:1}),
@@ -852,8 +969,6 @@ const weapons = [
       att("Amortizor",{steel:3,screw:5,polymer:3}),
       att("Grip",{steel:1,screw:5,polymer:1})
   ]},
-
-  /* ✅ Țeavă scoasă din atașamente (nu e atașament) */
   { name:"COMBAT MG MK2", type:"money", price:120000, attachments:[
       att("Lunetă-Mare",{steel:2,screw:12,polymer:2,lupa:1}),
       att("Încărcător",{steel:1,screw:5,spring:1,polymer:1}),
@@ -868,7 +983,6 @@ const weapons = [
       att("Flat-Muzzle-Brake",{steel:1,screw:4,polymer:1}),
       att("Split-End-Muzzle-Brake",{steel:1,screw:4,polymer:1})
   ]},
-
   { name:"GUSENBERG", type:"money", price:45000, attachments:[] },
   { name:"MG", type:"money", price:90000, attachments:[] },
 ];
@@ -956,8 +1070,22 @@ const lbImg = document.getElementById("lbImg");
 const lbTitle = document.getElementById("lbTitle");
 const lbClose = document.getElementById("lbClose");
 
+/* Detalii armă */
+const weaponDetailsWrap = document.getElementById("weaponDetailsWrap");
+const detailsImg = document.getElementById("detailsImg");
+const detailsName = document.getElementById("detailsName");
+const detailsMeta = document.getElementById("detailsMeta");
+const detailsTiny = document.getElementById("detailsTiny");
+const detailsPreviewCost = document.getElementById("detailsPreviewCost");
+const detailsPowder100 = document.getElementById("detailsPowder100");
+const detailsAmmo100 = document.getElementById("detailsAmmo100");
+const detailsBaseLines = document.getElementById("detailsBaseLines");
+const detailsZoomBtn = document.getElementById("detailsZoomBtn");
+const detailsScrollBtn = document.getElementById("detailsScrollBtn");
+
 function hide(el){ el.classList.remove("show"); }
 function show(el){ el.classList.add("show"); }
+
 function resetFlow(){
   hide(bulletsStep); hide(attachmentsStep); hide(qtyStep);
   resultDiv.style.display="none";
@@ -968,6 +1096,7 @@ function resetFlow(){
   noAttach.checked = false;
   attSearch.value = "";
   attChips.innerHTML = "";
+  weaponDetailsWrap.classList.remove("show");
 }
 function fillBullets(){
   bulletsSelect.innerHTML="";
@@ -1045,7 +1174,7 @@ function currentSelectionToObject(){
   return {weaponIndex:Number(weaponSelect.value), bullets, qty, noAttach:!!noAttach.checked, selectedAtt};
 }
 
-/* missing cost pack */
+/* Stoc lipsuri + cost */
 function computeMissing(need, have){
   const miss = emptyTotals();
   materialOrder.forEach(k=>{
@@ -1133,6 +1262,54 @@ function renderMissingGrid(miss, need){
     </div>
   `;
 }
+
+/* ✅ Upgrade: Detalii armă */
+function renderWeaponDetails(w){
+  if(!w){
+    weaponDetailsWrap.classList.remove("show");
+    return;
+  }
+  weaponDetailsWrap.classList.add("show");
+
+  detailsImg.src = imageForWeapon(w.name);
+  detailsImg.alt = w.name;
+  detailsName.textContent = w.name;
+  detailsMeta.textContent = `${categoryOf(w.name)} • ${w.type==="craft" ? "Craft" : "OFICIALA"}`;
+
+  const am100 = ammoExactInterpolated(w.name, 100);
+  detailsPowder100.textContent = Math.round(am100.powder);
+  detailsAmmo100.textContent = Math.round(am100.price).toLocaleString() + "$";
+
+  const preview = computeOneSelection({weaponIndex: Number(weaponSelect.value), qty: 1, bullets: 100, noAttach: true, selectedAtt: []});
+  detailsPreviewCost.textContent = preview.total.toLocaleString() + "$";
+
+  if(w.type==="craft"){
+    const m = w.materials || {};
+    const lines = [];
+    lines.push(`<div class="statRow"><span class="muted">Oțel</span><b>${m.steel||0}</b></div>`);
+    lines.push(`<div class="statRow"><span class="muted">Șuruburi</span><b>${m.screw||0}</b></div>`);
+    lines.push(`<div class="statRow"><span class="muted">Țeavă (component)</span><b>${m.barrel||0}</b></div>`);
+    lines.push(`<div class="statRow"><span class="muted">Arc</span><b>${m.spring||0}</b></div>`);
+    lines.push(`<div class="statRow"><span class="muted">Lemn</span><b>${m.wood||0}</b></div>`);
+    lines.push(`<div class="statRow"><span class="muted">Polimer</span><b>${m.polymer||0}</b></div>`);
+    detailsBaseLines.innerHTML = lines.join("");
+    detailsTiny.textContent = "Țeava este component al armei (nu atașament).";
+  } else {
+    detailsBaseLines.innerHTML = `<div class="statRow"><span class="muted">Preț armă</span><b>${Math.round(w.price||0).toLocaleString()}$</b></div>`;
+    detailsTiny.textContent = "Armele OFICIALA se cumpără pe bani, dar pot avea atașamente.";
+  }
+}
+detailsImg.addEventListener("click", ()=>{
+  const w=getSelectedWeapon(); if(!w) return;
+  openLightbox(w.name, imageForWeapon(w.name));
+});
+detailsZoomBtn.addEventListener("click", ()=>{
+  const w=getSelectedWeapon(); if(!w) return;
+  openLightbox(w.name, imageForWeapon(w.name));
+});
+detailsScrollBtn.addEventListener("click", ()=>{
+  if(bulletsStep.classList.contains("show")) bulletsStep.scrollIntoView({behavior:"smooth", block:"start"});
+});
 
 /* RESULT render */
 function renderResult(out, isPreview){
@@ -1273,19 +1450,29 @@ function buildWeaponSelect(){
   });
 }
 
-/* ✅ Attachment Builder
-   - Țeavă nu e atașament -> nu există în liste (deja scos)
-   - Baterie + Încărcător = aceeași categorie (Magazin)
-*/
+/* Attachment Builder */
 let currentAttFilter = "ALL";
 function attCategory(name){
   const n = (name||"").toLowerCase();
+
+  // ✅ Magazin (Încărcător + Baterie-Gloante)
+  if(n.includes("încărc") || n.includes("incarc") || n.includes("baterie") || n.includes("mag")) return "Magazin";
+
   if(n.includes("lunet") || n.includes("scope") || n.includes("vizor") || n.includes("holog")) return "Optică";
   if(n.includes("amort") || n.includes("muzzle") || n.includes("brake") || n.includes("suppress") || n.includes("suppres")) return "Muzzle";
-  if(n.includes("încărc") || n.includes("incarc") || n.includes("mag") || n.includes("baterie")) return "Magazin";
   if(n.includes("grip")) return "Grip";
   if(n.includes("lantern")) return "Utility";
   return "Altele";
+}
+function attIconForCategory(cat){
+  switch(cat){
+    case "Magazin": return `<i class="fa-solid fa-box"></i>`;
+    case "Optică":  return `<i class="fa-solid fa-scope"></i>`;
+    case "Muzzle":  return `<i class="fa-solid fa-burst"></i>`;
+    case "Grip":    return `<i class="fa-solid fa-hand"></i>`;
+    case "Utility": return `<i class="fa-solid fa-flashlight"></i>`;
+    default:        return `<i class="fa-solid fa-screwdriver-wrench"></i>`;
+  }
 }
 function unique(arr){ return [...new Set(arr)]; }
 function buildAttChips(cats){
@@ -1331,6 +1518,9 @@ function renderAttachmentsWithBuilder(w){
 
   const groups = {};
   w.attachments.forEach((a, idx)=>{
+    // ✅ protecție: dacă cumva ajunge "Țeavă" aici, NU o afișăm
+    if((a.name||"").trim().toLowerCase() === "țeavă" || (a.name||"").trim().toLowerCase() === "teavă") return;
+
     const cat = attCategory(a.name);
     if(!groups[cat]) groups[cat]=[];
     groups[cat].push({a, idx});
@@ -1365,7 +1555,13 @@ function renderAttachmentsWithBuilder(w){
     filtered.forEach(({a, idx})=>{
       const div=document.createElement("div");
       div.className="attach";
-      div.innerHTML = `<label><input type="checkbox" class="attCheck" value="${idx}"> ${a.name}</label>`;
+      div.innerHTML = `
+        <label>
+          <span class="attIcon" title="${cat}">${attIconForCategory(cat)}</span>
+          <input type="checkbox" class="attCheck" value="${idx}">
+          <span>${a.name}</span>
+        </label>
+      `;
       body.appendChild(div);
     });
 
@@ -1419,12 +1615,14 @@ function updateSelectedWeaponCard(w){
   selectedWeaponImg.src = imageForWeapon(w.name);
   selectedWeaponImg.alt = w.name;
 }
+
 function handleWeaponChange(){
   resultDiv.style.display="none";
   const w=getSelectedWeapon();
   if(!w){ resetFlow(); updateSelectedWeaponCard(null); return; }
 
   updateSelectedWeaponCard(w);
+  renderWeaponDetails(w);
 
   hide(bulletsStep); hide(attachmentsStep); hide(qtyStep);
   bulletsSelect.innerHTML="";
@@ -1441,6 +1639,7 @@ function handleWeaponChange(){
   bulletsSelect.value="100";
   setTimeout(()=> bulletsSelect.dispatchEvent(new Event("change")), 0);
 }
+
 function handleBulletsChange(){
   const w=getSelectedWeapon();
   if(!w) return;
@@ -1451,8 +1650,10 @@ function handleBulletsChange(){
 
   renderAttachmentsWithBuilder(w);
   show(qtyStep);
+
   updateLivePreview();
 }
+
 weaponSelect.addEventListener("change", handleWeaponChange);
 bulletsSelect.addEventListener("change", handleBulletsChange);
 
@@ -1535,8 +1736,9 @@ function renderWeaponGrid(){
 
   weapons.forEach((w, idx)=>{
     const cat = categoryOf(w.name);
-    if(modalCategory !== "ALL" && modalCategory !== cat) return;
-    if(modalCategory==="OFICIALA" && w.type!=="money") return;
+
+    if(modalCategory === "OFICIALA" && w.type !== "money") return;
+    if(modalCategory !== "ALL" && modalCategory !== "OFICIALA" && modalCategory !== cat) return;
 
     const hay = (w.name + " " + cat + " " + (w.type==="money" ? "oficiala" : "craft")).toLowerCase();
     if(q && !hay.includes(q)) return;
